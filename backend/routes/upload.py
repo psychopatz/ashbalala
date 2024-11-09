@@ -6,7 +6,7 @@ import os
 
 router = APIRouter()
 
-UPLOAD_DIR = "uploads"
+UPLOAD_DIR = "data/uploads"
 
 
 @router.post("/upload_ebook/")

@@ -9,8 +9,8 @@ load_dotenv()
 app = FastAPI()
 
 # Directory to store uploaded eBook files and audio files
-UPLOAD_DIR = "uploads"
-AUDIO_DIR = "audio"
+UPLOAD_DIR = "data/uploads"
+AUDIO_DIR = "data/audio"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(AUDIO_DIR, exist_ok=True)
 
