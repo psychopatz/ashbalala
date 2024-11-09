@@ -9,7 +9,7 @@ from tts_providers.google_tts import GoogleTTSProvider
 
 router = APIRouter()
 
-AUDIO_DIR = "audio"
+AUDIO_DIR = "data/audio"
 
 
 @router.post("/convert_to_speech/")
