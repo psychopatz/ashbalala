@@ -1,0 +1,7 @@
+fastapi 
+uvicorn
+aiofiles
+python-multipart
+python-dotenv
+azure-cognitiveservices-speech
+google-cloud-texttospeech
