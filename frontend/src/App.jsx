@@ -1,4 +1,6 @@
-import TTSApp from "./assets/TTSApp"
+import TTSApp from "./TTSApp";
+
+
 
 
 function App() {
