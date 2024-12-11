@@ -6,7 +6,26 @@ class LoginRequest(BaseModel):
     password: str
 
 class LoginResponse(BaseModel):
-    SessionID: str = Field(..., alias='SessionID')
+    SessionID: str
+    UserName: str
+    UserFirstName: str
+    UserLastName: str
+    AccType: str
+    UserLang: str
+    Enable2FA: str
+    Active2FA: str
+    UserID: str
+    IsAccountUser: int
+    DriveName: str
+    UserLevel: str
+    UserPlan: str
+    FVersioning: str
+    UserDomain: str
+    PartnerUsersDomain: str
+    UploadSpeedLimit: int
+    DownloadSpeedLimit: int
+    UploadsPerSecond: int
+    DownloadsPerSecond: int
 
 class UploadResponse(BaseModel):
     FileId: str = Field(..., alias='FileId')
