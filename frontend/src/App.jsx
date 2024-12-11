@@ -1,17 +1,23 @@
-import TTSApp from "./TTSApp";
+// App.js
+import React, { useState } from 'react';
+import EpubExtractor from './components/EpubExtractor';
+import EpubViewer from './components/EpubViewer';
 
 
+const App = () => {
+  const [content, setContent] = useState([]);
+  console.log(content);
 
-
-function App() {
-
+  const handleExtract = (extractedContent) => {
+    setContent(extractedContent);
+  };
 
   return (
-    <>
+    <div>
+      <EpubExtractor onExtract={handleExtract} />
+      <EpubViewer content={content} />
+    </div>
+  );
+};
 
-      <TTSApp/>
-    </>
-  )
-}
-
-export default App
+export default App;
