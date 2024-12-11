@@ -1,0 +1,101 @@
+meta {
+  name: CreateFolder
+  type: http
+  seq: 9
+}
+
+post {
+  url: http://localhost:8000/opendrive/newfolder?folder_name=Backend Folder&folder_is_public=1&folder_public_upl=0&folder_public_display=1&folder_public_dnl=1&folder_description=Test Folder for Backend
+  body: none
+  auth: none
+}
+
+params:query {
+  folder_name: Backend Folder
+  folder_is_public: 1
+  folder_public_upl: 0
+  folder_public_display: 1
+  folder_public_dnl: 1
+  folder_description: Test Folder for Backend
+}
+
+headers {
+  accept: application/json
+}
+
+tests {
+  {
+    "FolderID": "NTJfNTY3MzI2MV9Eb2NpSQ",
+    "Name": "Backend Folder",
+    "DateCreated": 1733946221,
+    "DirUpdateTime": 1733946221,
+    "Access": 1,
+    "DateModified": 1,
+    "Shared": "False",
+    "Description": "Test Folder for Backend",
+    "Link": "https://od.lk/fl/NTJfNTY3MzI2MV8"
+  }
+}
+
+docs {
+  # Folder Creation/Update API Parameters
+  
+  The following parameters are used when creating or updating a folder via the API.
+  
+  | Parameter               | Type   | Required | Description                                                                 |
+  |-------------------------|--------|----------|-----------------------------------------------------------------------------|
+  | `session_id`            | string | Yes      | **Session ID**: A unique identifier for the user or API session.            |
+  | `folder_name`           | string | Yes      | **Folder Name**: The name of the folder. Max 255 characters.                |
+  | `folder_sub_parent`     | string | Yes      | **Folder Sub Parent**: ID of the parent folder. Use `0` for root folder.    |
+  | `folder_is_public`      | int    | Yes      | **Folder Visibility**: Determines the folder's visibility: <br> `0 = private` <br> `1 = public` <br> `2 = hidden`. |
+  | `folder_public_upl`     | int    | No       | **Public Upload**: Controls whether public upload is allowed. <br> `0 = disabled` <br> `1 = enabled`. |
+  | `folder_public_display` | int    | No       | **Public Display**: Controls whether the folder is publicly displayed. <br> `0 = disabled` <br> `1 = enabled`. |
+  | `folder_public_dnl`     | int    | No       | **Public Download**: Controls whether public download is allowed. <br> `0 = disabled` <br> `1 = enabled`. |
+  | `folder_description`    | string | No       | **Folder Description**: A brief description of the folder (optional).       |
+  
+  ---
+  
+  ### Parameter Details
+  
+  - **`session_id`**: This is a required field that identifies the current session of the user or the API request. It ensures that the request is associated with an active session.
+  
+  - **`folder_name`**: The name of the folder being created or updated. The name must be unique within the parent folder and cannot exceed 255 characters.
+  
+  - **`folder_sub_parent`**: This parameter specifies the parent folder's ID. If no parent exists, use `0` to indicate that the folder is at the root level.
+  
+  - **`folder_is_public`**: This field defines the visibility status of the folder. 
+    - `0` = private (only accessible by the owner or authorized users),
+    - `1` = public (accessible to everyone),
+    - `2` = hidden (not publicly accessible, but still available to the owner or authorized users).
+  
+  - **`folder_public_upl`**: Defines whether users can upload files to the folder publicly. 
+    - `0` = disabled (public uploads are not allowed),
+    - `1` = enabled (public uploads are allowed).
+  
+  - **`folder_public_display`**: Determines whether the folder is displayed publicly in any directory or search results. 
+    - `0` = disabled (folder is hidden from public view),
+    - `1` = enabled (folder is displayed to the public).
+  
+  - **`folder_public_dnl`**: This parameter defines whether users can download files from the folder publicly. 
+    - `0` = disabled (public download is not allowed),
+    - `1` = enabled (public download is allowed).
+  
+  - **`folder_description`**: An optional field that allows the folder to have a description. This can be used to provide more context about the folder's contents or purpose.
+  
+  ---
+  
+  ### Example Request
+  
+  ```json
+  {
+      "session_id": "abc123xyz",
+      "folder_name": "Documents",
+      "folder_sub_parent": "0",
+      "folder_is_public": "1",
+      "folder_public_upl": "1",
+      "folder_public_display": "1",
+      "folder_public_dnl": "1",
+      "folder_description": "This folder contains public documents."
+  }
+  
+}

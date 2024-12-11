@@ -27,8 +27,3 @@ class LoginResponse(BaseModel):
     UploadsPerSecond: int
     DownloadsPerSecond: int
 
-class UploadResponse(BaseModel):
-    FileId: str = Field(..., alias='FileId')
-
-class DownloadLinkResponse(BaseModel):
-    DownloadLink: str = Field(..., alias='DownloadLink')

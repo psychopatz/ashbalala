@@ -28,67 +28,32 @@ class OpenDriveService:
         if not self.session_id:
             await self.login()
 
-    async def upload_file(self, folder_id: str, file_path: str):
-        await self.ensure_session()
-        file_name = os.path.basename(file_path)
 
-        async with aiofiles.open(file_path, 'rb') as f:
-            files = {
-                "file": (file_name, await f.read(), "application/octet-stream")
-            }
-
-        data = {
-            "session_id": self.session_id,
-            "folder_id": folder_id,
-            "overwrite": "true"
-        }
-
-        # Upload endpoint: /upload.json
-        response = await self.http.client.post(
-            f"{self.base_url}/upload.json", 
-            data=data, 
-            files=files
-        )
-        response.raise_for_status()
-        upload_data = UploadResponse(**response.json())
-        return upload_data.FileId
-
-    async def get_download_link(self, file_id: str):
-        await self.ensure_session()
-        params = {
-            "session_id": self.session_id,
-            "file_id": file_id
-        }
-        response = await self.http.get("/file/download_link.json", params=params)
-        download_data = DownloadLinkResponse(**response.json())
-        return download_data.DownloadLink
-
-    async def download_file(self, file_id: str, dest_path: str):
-        link = await self.get_download_link(file_id)
-
-        async with self.http.client as client:
-            r = await client.get(link)
-            r.raise_for_status()
-            async with aiofiles.open(dest_path, 'wb') as f:
-                await f.write(r.content)
-
-        return dest_path
-
-    async def create_folder(self, parent_id: str, folder_name: str):
+    async def create_new_folder(
+        self,
+        folder_name: str,
+        folder_sub_parent: str,
+        folder_is_public: int,
+        folder_public_upl: int,
+        folder_public_display: int,
+        folder_public_dnl: int,
+        folder_description: str = "",
+        ):
+        """
+        Creates a new folder with advanced options.
+        """
         await self.ensure_session()
         json_data = {
             "session_id": self.session_id,
             "folder_name": folder_name,
-            "parent_id": parent_id
+            "folder_sub_parent": folder_sub_parent,
+            "folder_is_public": folder_is_public,
+            "folder_public_upl": folder_public_upl,
+            "folder_public_display": folder_public_display,
+            "folder_public_dnl": folder_public_dnl,
+            "folder_description": folder_description,
         }
         response = await self.http.post("/folder.json", json=json_data)
         return response.json()
-
-    async def get_folder_content(self, folder_id: str):
-        await self.ensure_session()
-        params = {
-            "session_id": self.session_id,
-            "folder_id": folder_id
-        }
-        response = await self.http.get("/folder/list.json", params=params)
-        return response.json()
+    
+    
