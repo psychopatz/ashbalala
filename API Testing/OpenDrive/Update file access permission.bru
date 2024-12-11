@@ -1,0 +1,22 @@
+meta {
+  name: Update file access permission
+  type: http
+  seq: 4
+}
+
+post {
+  url: https://dev.opendrive.com/api/v1/file/access.json
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "session_id": "abc123xyz456",
+    "file_id": "file7890",
+    "file_ispublic": 1,
+    "access_folder_id": 10,
+    "sharing_id": "share123abc"
+  }
+  
+}

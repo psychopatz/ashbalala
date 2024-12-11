@@ -1,0 +1,17 @@
+meta {
+  name: Check if Session is Still Active
+  type: http
+  seq: 2
+}
+
+post {
+  url: https://dev.opendrive.com/api/v1/session/exists.json
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "session_id": "49f043bcf5b0360b87899031732d3c4ec795cad9c271bb1912450e4d17b86db6"
+  }
+}
