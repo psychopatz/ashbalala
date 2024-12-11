@@ -14,14 +14,15 @@ class OpenDriveService:
 
     async def login(self):
         data = {
-            "username": str(self.username),
-            "passwd": str(self.password)
+            "username": self.username,
+            "passwd": self.password
         }
-        
         response = await self.http.post("/session/login.json", json=data)
+        response.raise_for_status()
         login_data = LoginResponse(**response.json())
         self.session_id = login_data.SessionID
-        return self.session_id
+        return login_data
+
 
     async def ensure_session(self):
         if not self.session_id:

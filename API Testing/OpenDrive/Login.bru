@@ -1,0 +1,18 @@
+meta {
+  name: Login
+  type: http
+  seq: 1
+}
+
+post {
+  url: https://dev.opendrive.com/api/v1/session/login.json
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "username": "adsds",
+      "passwd": "asd"
+  }
+}

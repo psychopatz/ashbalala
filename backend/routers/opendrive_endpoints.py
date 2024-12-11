@@ -8,8 +8,9 @@ service = OpenDriveService()
 
 @router.post("/login")
 async def login():
-    session_id = await service.login()
-    return {"session_id": session_id}
+    login_details = await service.login()
+    return login_details
+
 
 @router.post("/upload")
 async def upload_file(folder_id: str, file: UploadFile = File(...)):
