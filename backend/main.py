@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.voices import tts, get_voices
-from app.services.azure_services import token_manager, voice_manager
+from backend.routers import tts, voices
 
 app = FastAPI()
 
@@ -13,9 +12,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include routers
-app.include_router(tts.router)
-app.include_router(get_voices.router)
+# Include Routers
+app.include_router(tts.router, prefix="/tts", tags=["Text-to-Speech"])
+app.include_router(voices.router, prefix="/voices", tags=["Voices"])
 
 if __name__ == "__main__":
     import uvicorn
