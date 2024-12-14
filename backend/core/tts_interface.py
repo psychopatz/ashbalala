@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Dict, Optional
 
+# TTS Interface
 class ITTSService(ABC):
     @abstractmethod
     async def get_token(self) -> str:
