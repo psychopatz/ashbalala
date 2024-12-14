@@ -1,7 +1,7 @@
 # routers/opendrive_endpoint.py
 from fastapi import APIRouter, UploadFile, File, HTTPException, Depends
 from backend.services.opendrive_service import OpenDriveService
-from backend.models.opendrive import LoginRequest, SessionCheckRequest, SessionCheckResponse
+from backend.models.opendrive import LoginRequest, SessionCheckRequest, SessionCheckResponse, CheckFileExistsRequest, CheckFileExistsResponse
 from typing import Optional
 import os
 import uuid
@@ -68,5 +68,25 @@ async def create_new_folder(
             folder_description=folder_description,
         )
         return response
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    
+    
+@router.post("/check_file_exists", response_model=CheckFileExistsResponse)
+async def check_file_exists(
+    request: CheckFileExistsRequest,
+    service: OpenDriveService = Depends(get_opendrive_service)
+):
+    """
+    Endpoint to check if files exist in a given folder.
+    The 'folder_id' is taken from the request and appended to the endpoint URL.
+    """
+    try:
+        result = await service.check_file_exists(
+            folder_id=request.folder_id,
+            session_id=request.session_id,
+            names=request.name
+        )
+        return CheckFileExistsResponse(**result)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

@@ -1,5 +1,4 @@
-# services/opendrive_services.py
-import os
+# services/opendrive_service.py
 import aiofiles
 from backend.utils.http_client import HTTPClient
 from backend.models.opendrive import LoginResponse, UploadResponse, DownloadLinkResponse
@@ -24,29 +23,25 @@ class OpenDriveService:
         self.session_id = login_data.SessionID
         return login_data
 
-
     async def ensure_session(self):
         if not self.session_id:
             await self.login()
         else:
-             # check if session_id is valid
-             data = {
-                  "session_id": self.session_id
-                }
-             try:
-                 response = await self.http.post("/session/check.json", json=data)
-                 response.raise_for_status()
-                 if response.json().get('Error') == 1:
+            # check if session_id is valid
+            data = {
+                "session_id": self.session_id
+            }
+            try:
+                response = await self.http.post("/session/check.json", json=data)
+                response.raise_for_status()
+                if response.json().get('Error') == 1:
                     self.session_id = None
                     await self.login()
-             except:
-                 self.session_id = None
-                 await self.login()
-    
+            except:
+                self.session_id = None
+                await self.login()
+
     async def check_session(self, session_id: str):
-        """
-        Checks if a session_id is still valid.
-        """
         data = {
             "session_id": session_id
         }
@@ -62,10 +57,7 @@ class OpenDriveService:
         folder_public_display: int,
         folder_public_dnl: int,
         folder_description: str = "",
-        ):
-        """
-        Creates a new folder with advanced options.
-        """
+    ):
         await self.ensure_session()
         json_data = {
             "session_id": self.session_id,
@@ -78,4 +70,14 @@ class OpenDriveService:
             "folder_description": folder_description,
         }
         response = await self.http.post("/folder.json", json=json_data)
+        return response.json()
+
+    async def check_file_exists(self, folder_id: str, session_id: str, names: list):
+        # Directly use the provided session_id
+        endpoint = f"/upload/checkfileexistsbyname.json/{folder_id}"
+        json_data = {
+            "session_id": session_id,
+            "name": names
+        }
+        response = await self.http.post(endpoint, json=json_data)
         return response.json()
