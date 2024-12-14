@@ -1,4 +1,3 @@
-# / backend/models/tts_request.py
 from pydantic import BaseModel
 from backend.core.config import DEFAULT_VOICE, DEFAULT_STYLE, DEFAULT_RATE, DEFAULT_PITCH
 

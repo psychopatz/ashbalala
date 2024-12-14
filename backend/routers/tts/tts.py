@@ -1,17 +1,19 @@
-#/ backend/routers/tts.py
-from fastapi import APIRouter, BackgroundTasks, HTTPException
-from backend.models.tts_request import TTSRequest
-from backend.services.azure_service import AzureTTSService
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Depends
+from backend.models.tts.tts_request import TTSRequest
+from backend.services.tts.azure_service import AzureTTSService
 from backend.utils.file_io import save_audio_file
+from backend.core.tts_interface import ITTSService
 import base64
 import uuid
 from backend.core.config import AUDIO_FILES_DIR
 
 router = APIRouter()
-tts_service = AzureTTSService()
+def get_tts_service() -> ITTSService:
+    return AzureTTSService()
+
 
 @router.post("/")
-async def text_to_speech(request: TTSRequest, background_tasks: BackgroundTasks):
+async def text_to_speech(request: TTSRequest, background_tasks: BackgroundTasks, tts_service: ITTSService = Depends(get_tts_service)):
     try:
         audio_content = await tts_service.synthesize_speech(
             text=request.text,

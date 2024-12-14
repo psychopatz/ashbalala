@@ -1,4 +1,3 @@
-# / backend/services/azure_service.py
 import requests
 import uuid
 import os

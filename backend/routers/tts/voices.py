@@ -1,16 +1,19 @@
-# / backend/routers/voices.py
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from typing import Optional
-from backend.services.azure_service import AzureTTSService
+from backend.services.tts.azure_service import AzureTTSService
+from backend.core.tts_interface import ITTSService
 
 router = APIRouter()
-tts_service = AzureTTSService()
+
+def get_tts_service() -> ITTSService:
+    return AzureTTSService()
 
 @router.get("/")
 async def get_available_voices(
     locale: Optional[str] = None,
     gender: Optional[str] = None,
     neural: Optional[bool] = None,
+    tts_service: ITTSService = Depends(get_tts_service)
 ):
     """
     Get available voices with optional filters:
