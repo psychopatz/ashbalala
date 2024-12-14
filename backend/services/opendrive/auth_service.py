@@ -1,3 +1,4 @@
+# backend\services\opendrive\auth_service.py
 from backend.utils.http_client import HTTPClient
 from backend.models.opendrive.auth_models import LoginResponse
 from backend.core.config import OPENDRIVE_BASE_URL, OPENDRIVE_USERNAME, OPENDRIVE_PASSWORD
@@ -20,8 +21,9 @@ class AuthService(IAuthService):
         response.raise_for_status()
         login_data = LoginResponse(**response.json())
         self.session_id = login_data.SessionID
+        print(f"Loging in using authkey: {self.session_id}")
         return login_data
-    
+
     async def ensure_session(self):
         if not self.session_id:
             await self.login()
@@ -39,7 +41,6 @@ class AuthService(IAuthService):
             except:
                 self.session_id = None
                 await self.login()
-
 
     async def check_session(self, session_id: str) -> dict:
         data = {
