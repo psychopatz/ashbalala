@@ -4,9 +4,9 @@ from backend.services.opendrive_service import OpenDriveService
 from backend.models.opendrive import (
     LoginRequest, SessionCheckRequest, SessionCheckResponse,
     CheckFileExistsRequest, CheckFileExistsResponse,
-    CreateFileRequest, CreateFileResponse,
-    OpenFileUploadRequest, OpenFileUploadResponse,
-    UploadFileChunkRequest, UploadFileChunkResponse,
+    CreateFileRequest, 
+    OpenFileUploadRequest, 
+    UploadFileChunkRequest, 
     CloseFileUploadRequest
 )
 import os
@@ -96,7 +96,8 @@ async def upload_file(
             session_id=session_id,
             folder_id=folder_id,
             file_name=dest_file_name,
-            file_size=file_size
+            file_size=file_size,
+            open_if_exists=1 # Use open_if_exists to handle duplicate names
         )
         create_file_response = await service.create_file(create_file_request)
         file_id = create_file_response.FileId
