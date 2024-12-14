@@ -1,6 +1,7 @@
 from backend.utils.http_client import HTTPClient
 from backend.models.opendrive import (LoginResponse, CheckFileExistsResponse, 
-                                      CreateFileResponse, DownloadLinkResponse)
+                                      CreateFileResponse, DownloadLinkResponse,
+                                      OpenFileUploadResponse)
 from backend.core.config import OPENDRIVE_BASE_URL, OPENDRIVE_USERNAME, OPENDRIVE_PASSWORD
 
 class OpenDriveService:
@@ -112,5 +113,31 @@ class OpenDriveService:
         if open_if_exists is not None:
             json_data["open_if_exists"] = open_if_exists
 
+        response = await self.http.post(endpoint, json=json_data)
+        return response.json()
+
+    async def open_file_upload(
+        self,
+        session_id: str,
+        file_id: str,
+        file_size: int,
+        access_folder_id: str = None,
+        file_hash: str = None,
+        sharing_id: str = None
+    ):
+        endpoint = "/upload/open_file_upload.json"
+        json_data = {
+            "session_id": session_id,
+            "file_id": file_id,
+            "file_size": file_size
+        }
+
+        if access_folder_id is not None:
+            json_data["access_folder_id"] = access_folder_id
+        if file_hash is not None:
+            json_data["file_hash"] = file_hash
+        if sharing_id is not None:
+            json_data["sharing_id"] = sharing_id
+            
         response = await self.http.post(endpoint, json=json_data)
         return response.json()

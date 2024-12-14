@@ -84,3 +84,20 @@ class CreateFileResponse(BaseModel):
 
     class Config:
         extra = "allow"  # Allows ignoring unexpected fields
+
+# Open file upload models
+class OpenFileUploadRequest(BaseModel):
+    session_id: str
+    file_id: str
+    file_size: int
+    access_folder_id: Optional[str] = None
+    file_hash: Optional[str] = None
+    sharing_id: Optional[str] = None
+    
+
+class OpenFileUploadResponse(BaseModel):
+    TempLocation: Optional[str] = None
+    RequireCompression: Optional[int] = None
+    RequireHash: Optional[int] = None
+    RequireHashOnly: Optional[int] = None
+    SpeedLimit: Optional[int] = None
