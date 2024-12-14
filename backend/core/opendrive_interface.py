@@ -15,14 +15,12 @@ from backend.models.opendrive.file_models import (
 
 
 class IAuthService(Protocol):
-
     async def login(self) -> LoginResponse: ...
     async def check_session(self, session_id: str) -> dict: ...
     async def ensure_session(self) -> None: ...
 
 
 class IFolderService(Protocol):
-
     async def create_new_folder(
         self,
         folder_name: str,
@@ -38,7 +36,6 @@ class IFolderService(Protocol):
 
 
 class IFileService(Protocol):
-
     async def check_file_exists(
         self, folder_id: str, session_id: str, names: List[str]
     ) -> dict: ...

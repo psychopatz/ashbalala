@@ -109,14 +109,9 @@ async def upload_file(
 
 @router.get("/file/{file_id}/thumbnail")
 async def get_file_thumbnail(
-    file_id: str, service: IFileService = Depends(get_file_service)
+    file_id: str, session_id: str, service: IFileService = Depends(get_file_service)
 ):
     try:
-        from backend.services.opendrive.auth_service import AuthService
-
-        auth_service = AuthService()
-        await auth_service.ensure_session()
-        session_id = auth_service.session_id
         thumbnail_response = await service.retrieve_thumb(
             session_id=session_id, file_id=file_id
         )
