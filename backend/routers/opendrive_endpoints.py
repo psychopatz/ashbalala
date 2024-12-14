@@ -8,7 +8,8 @@ from backend.models.opendrive import (
     OpenFileUploadRequest, 
     UploadFileChunkRequest, 
     CloseFileUploadRequest,
-    ListFolderRequest, ListFolderResponse
+    ListFolderRequest, ListFolderResponse,
+    RemoveFolderRequest, RemoveFolderResponse
 )
 import os
 import uuid
@@ -174,4 +175,16 @@ async def list_folder(
         result = await service.list_folder(request)
         return result
     except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.post("/folder/remove", response_model=RemoveFolderResponse)
+async def remove_folder(
+    folder_id: str,
+    service: OpenDriveService = Depends(get_opendrive_service)
+):
+  try:
+      request = RemoveFolderRequest(folder_id=folder_id)
+      result = await service.remove_folder(request)
+      return result
+  except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

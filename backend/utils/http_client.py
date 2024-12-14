@@ -1,3 +1,4 @@
+# utils/http_client.py
 import httpx
 
 class HTTPClient:
