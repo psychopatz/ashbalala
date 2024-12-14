@@ -1,6 +1,6 @@
 # models/opendrive.py
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional, List
 
 class LoginRequest(BaseModel):
     username: Optional[str] = None
@@ -42,3 +42,13 @@ class SessionCheckRequest(BaseModel):
 
 class SessionCheckResponse(BaseModel):
   result: bool
+  
+
+# Check if file exists
+class CheckFileExistsRequest(BaseModel):
+    folder_id: str
+    session_id: str
+    name: List[str]
+
+class CheckFileExistsResponse(BaseModel):
+    result: List[str]
