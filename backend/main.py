@@ -3,7 +3,8 @@ load_dotenv()
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.routers import tts, voices
+from backend.routers.tts import tts as tts_router
+from backend.routers.tts import voices as voices_router
 from backend.routers.opendrive import auth as auth_router
 from backend.routers.opendrive import folder as folder_router
 from backend.routers.opendrive import file as file_router
@@ -19,15 +20,15 @@ app.add_middleware(
 )
 
 # Include Routers
-app.include_router(tts.router, prefix="/tts", tags=["Text-to-Speech"])
-app.include_router(voices.router, prefix="/voices", tags=["Voices"])
+app.include_router(tts_router.router, prefix="/tts", tags=["Text-to-Speech"])
+app.include_router(voices_router.router, prefix="/voices", tags=["Voices"])
 app.include_router(auth_router.router, prefix="/opendrive", tags=["OpenDrive Auth"])
 app.include_router(folder_router.router, prefix="/opendrive", tags=["OpenDrive Folder"])
 app.include_router(file_router.router, prefix="/opendrive", tags=["OpenDrive File"])
 
 @app.get("/")
 async def root():
-    return {"message": "OpenDrive API"}
+    return {"message": "Welcome to Ashbalala Backend"}
 
 if __name__ == "__main__":
     import uvicorn
