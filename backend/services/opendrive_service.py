@@ -1,6 +1,15 @@
 from backend.utils.http_client import HTTPClient
-from backend.models.opendrive import (LoginResponse)
+from backend.models.opendrive import (
+    LoginResponse,
+    CreateFileRequest, CreateFileResponse,
+    OpenFileUploadRequest, OpenFileUploadResponse,
+    UploadFileChunkRequest, UploadFileChunkResponse,
+    CloseFileUploadRequest, CloseFileUploadResponse
+)
 from backend.core.config import OPENDRIVE_BASE_URL, OPENDRIVE_USERNAME, OPENDRIVE_PASSWORD
+import aiofiles
+import os
+import tempfile
 
 class OpenDriveService:
     def __init__(self):
@@ -77,4 +86,50 @@ class OpenDriveService:
             "name": names
         }
         response = await self.http.post(endpoint, json=json_data)
+        return response.json()
+
+    async def create_file(self, request: CreateFileRequest) -> CreateFileResponse:
+        await self.ensure_session()
+        response = await self.http.post(
+            "/upload/create_file.json",
+            json=request.model_dump()
+        )
+        response.raise_for_status()
+        print("create_file response:", response.json())
+        return CreateFileResponse(**response.json())
+
+    async def open_file_upload(self, request: OpenFileUploadRequest) -> OpenFileUploadResponse:
+        await self.ensure_session()
+        response = await self.http.post(
+            "/upload/open_file_upload.json",
+            json=request.model_dump()
+        )
+        response.raise_for_status()
+        print("open_file_upload response:", response.json())
+        return OpenFileUploadResponse(**response.json())
+
+    async def upload_file_chunk(self, request: UploadFileChunkRequest, file_path: str) -> UploadFileChunkResponse:
+        await self.ensure_session()
+        
+        # Create a temporary file to hold the chunk
+        with open(file_path, "rb") as file:
+            files = {"file_data": file}
+            data = request.model_dump()
+            response = await self.http.post(
+                "/upload/upload_file_chunk.json",
+                data = data,
+                files = files
+            )
+        response.raise_for_status()
+        print("upload_file_chunk response:", response.json())
+        return UploadFileChunkResponse(**response.json())
+    
+    async def close_file_upload(self, request: CloseFileUploadRequest):
+        await self.ensure_session()
+        response = await self.http.post(
+            "/upload/close_file_upload.json",
+            json=request.model_dump()
+        )
+        response.raise_for_status()
+        print("close_file_upload response:", response.json())
         return response.json()

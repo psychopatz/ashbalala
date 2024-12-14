@@ -44,3 +44,44 @@ class CheckFileExistsRequest(BaseModel):
 
 class CheckFileExistsResponse(BaseModel):
     result: List[str]
+
+# File upload models
+class CreateFileRequest(BaseModel):
+    session_id: str
+    folder_id: str
+    file_name: str
+    file_size: int
+
+class CreateFileResponse(BaseModel):
+    FileId: str
+    DirUpdateTime: Optional[int]
+
+class OpenFileUploadRequest(BaseModel):
+    session_id: str
+    file_id: str
+    file_size: int
+
+class OpenFileUploadResponse(BaseModel):
+    TempLocation: str
+
+class UploadFileChunkRequest(BaseModel):
+    session_id: str
+    file_id: str
+    temp_location: str
+    chunk_offset: int
+    chunk_size: int
+
+class UploadFileChunkResponse(BaseModel):
+    TotalWritten: int
+
+class CloseFileUploadRequest(BaseModel):
+    session_id: str
+    file_id: str
+    file_size: int
+    temp_location: str
+    file_time: int
+
+
+class CloseFileUploadResponse(BaseModel):
+    FileId: str
+    Datetime: str
