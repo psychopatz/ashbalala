@@ -1,0 +1,18 @@
+meta {
+  name: DeleteFolder
+  type: http
+  seq: 13
+}
+
+post {
+  url: https://dev.opendrive.com/api/v1/folder/remove.json
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "session_id": "49f043bcf5b0360b87899031732d3c4ec795cad9c271bb1912450e4d17b86db6",
+    "folder_id": "NTJfNTY3Mzk5MV8xZnJpVQ"
+  }
+}

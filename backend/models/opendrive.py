@@ -183,7 +183,6 @@ class FolderInfo(BaseModel):
     OwnerLevel: str
     HasSubFolders: int
 
-
 class ListFolderResponse(BaseModel):
     DirUpdateTime: str
     Name: str
@@ -192,3 +191,10 @@ class ListFolderResponse(BaseModel):
     ResponseType: int
     Folders: Optional[List[FolderInfo]] = []
     Files: Optional[List[FileInfo]] = []
+
+# Remove Folder request/response
+class RemoveFolderRequest(BaseModel):
+    folder_id: str
+
+class RemoveFolderResponse(BaseModel):
+    DirUpdateTime: int

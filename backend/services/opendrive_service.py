@@ -5,7 +5,8 @@ from backend.models.opendrive import (
     OpenFileUploadRequest, OpenFileUploadResponse,
     UploadFileChunkRequest, UploadFileChunkResponse,
     CloseFileUploadRequest, CloseFileUploadResponse,
-    ListFolderRequest, ListFolderResponse
+    ListFolderRequest, ListFolderResponse,
+    RemoveFolderRequest, RemoveFolderResponse
 )
 from backend.core.config import OPENDRIVE_BASE_URL, OPENDRIVE_USERNAME, OPENDRIVE_PASSWORD
 import aiofiles
@@ -145,3 +146,12 @@ class OpenDriveService:
         # Parse the response using model_validate
         data = response.json()
         return ListFolderResponse.model_validate(data)
+    
+    async def remove_folder(self, request: RemoveFolderRequest) -> RemoveFolderResponse:
+        await self.ensure_session()
+        request_data = request.model_dump()
+        request_data["session_id"]= self.session_id
+        response = await self.http.post("/folder/remove.json", json=request_data)
+        response.raise_for_status()
+        print("remove_folder response:", response.json())
+        return RemoveFolderResponse(**response.json())
