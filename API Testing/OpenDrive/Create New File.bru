@@ -1,0 +1,22 @@
+meta {
+  name: Create New File
+  type: http
+  seq: 11
+}
+
+post {
+  url: https://dev.opendrive.com/api/v1/upload/create_file.json
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "session_id": "49f043bcf5b0360b87899031732d3c4ec795cad9c271bb1912450e4d17b86db6",
+    "folder_id": "NTJfNTY3MzI2MV9Eb2NpSQ",
+    "file_name": "lolalolo.png",
+    "file_description": "This is an example document used for testing.",
+    "open_if_exists": 0
+  }
+  
+}

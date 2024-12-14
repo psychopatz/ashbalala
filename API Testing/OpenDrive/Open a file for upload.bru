@@ -1,0 +1,109 @@
+meta {
+  name: Open a file for upload
+  type: http
+  seq: 8
+}
+
+post {
+  url: https://dev.opendrive.com/api/v1/upload/open_file_upload.json
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "session_id": "49f043bcf5b0360b87899031732d3c4ec795cad9c271bb1912450e4d17b86db6",
+    "file_id": "NTJfNDc1OTQzOTBfQnBhcGE",
+    "file_size": 458752
+  }
+  
+}
+
+docs {
+  # Open File Upload API Documentation
+  
+  This API is used to initialize the file upload process before the actual file content is uploaded. It provides necessary details for uploading large files, including temporary storage locations, compression requirements, and hash settings. The API also checks if a file with the same hash and size already exists in the database, in which case the upload can be skipped.
+  
+  ## Endpoint
+  
+  `POST /upload/open_file_upload.json`
+  
+  ## Role
+  
+  - **Role 1 and 2**: Accessible to users with Role 1 and Role 2.
+  
+  ## Description
+  
+  The **Open File Upload** API is called before uploading a file. It prepares the system for large file uploads by determining the temporary location for storing the file, the need for compression, and whether the file’s MD5 hash should be calculated. It also checks for file duplication by comparing the `file_size` and `file_hash` to the existing records in the database.
+  
+  - If the file already exists in the database (i.e., a file with the same `file_size` and `file_hash`), the upload can be skipped, and the upload process is finalized immediately.
+  - If compression is required, the file should be compressed using the Zlib algorithm with level 6.
+  - If a hash calculation is required, the MD5 hash of the file will be calculated upon calling the `close_file_upload` function.
+  
+  ## Method
+  
+  - **POST**
+  
+  ## Parameters
+  
+  The request body should contain the following parameters:
+  
+  | Parameter         | Type    | Description                                                                                                    | Required | Notes                                                                                                  |
+  |-------------------|---------|----------------------------------------------------------------------------------------------------------------|----------|--------------------------------------------------------------------------------------------------------|
+  | `session_id`      | string  | The unique identifier for the user's session.                                                                  | Yes      | A valid session ID is required for authentication and authorization.                                    |
+  | `file_id`         | string  | The ID of the file being uploaded.                                                                              | Yes      | A valid file ID is required to associate the upload with the correct file.                             |
+  | `file_size`       | integer | The size of the file in bytes.                                                                                 | Yes      | The total size of the file being uploaded.                                                             |
+  | `access_folder_id`| string  | The ID of the folder that controls access permissions for the file.                                            | No       | Optional; if provided, it will control the access permissions for the uploaded file.                  |
+  | `file_hash`       | string  | The MD5 hash of the file, used to check if the file already exists.                                            | No       | Optional; if provided, it helps check if the file already exists in the system.                        |
+  | `sharing_id`      | string  | The sharing configuration ID for the file (optional).                                                           | No       | Optional; used for defining sharing permissions for the file.                                          |
+  
+  ## Returns
+  
+  Upon success, the API will return a JSON object containing the following fields:
+  
+  | Field               | Type   | Description                                                                                                   |
+  |---------------------|--------|---------------------------------------------------------------------------------------------------------------|
+  | `TempLocation`      | string | The temporary location where the file can be uploaded.                                                        |
+  | `RequireCompression`| integer| Indicates if the file should be compressed (`1` for compression, `0` for no compression).                     |
+  | `RequireHash`       | integer| Indicates if the MD5 hash should be calculated for the file upon calling `close_file_upload` (`1` or `0`).      |
+  | `RequireHashOnly`   | integer| If a file with the same `file_size` and `file_hash` already exists in the DB, setting this to `1` allows skipping the upload process. |
+  | `SpeedLimit`        | integer| The file downloading speed limit (in bytes per second), if applicable.                                         |
+  
+  ### Example Response
+  
+  ```json
+  {
+    "TempLocation": "/tmp/uploads/file_001",
+    "RequireCompression": 1,
+    "RequireHash": 1,
+    "RequireHashOnly": 0,
+    "SpeedLimit": 1048576
+  }
+  ```
+  
+  In this example:
+  - `TempLocation`: The location where the file should be uploaded.
+  - `RequireCompression`: Indicates that compression is required (`1` means compress using Zlib level 6).
+  - `RequireHash`: Indicates that an MD5 hash should be calculated during the `close_file_upload` process.
+  - `RequireHashOnly`: Indicates whether the upload process should be skipped if the file with the same hash and size already exists (`0` means the upload is not skipped).
+  - `SpeedLimit`: The download speed limit is set to 1MB per second.
+  
+  ## Error Responses
+  
+  ### `400: Bad Request`
+  - **Invalid file ID**: The `file_id` provided is invalid or not recognized by the system.
+  
+  ### `401: Unauthorized`
+  - **Session has expired**: The user's session has expired. The user must log out and log back in to proceed with the upload.
+  
+  ## Notes
+  
+  - **Before File Upload**: The **Open File Upload** API should be called before initiating the file upload. It sets up the required configurations for handling large files, including temporary file storage, hash calculations, and compression requirements.
+  - **File Duplication**: If both `file_size` and `file_hash` are provided, the API checks if a file with the same attributes already exists. If the file exists, setting `RequireHashOnly` to `1` allows skipping the upload.
+  - **Compression**: If the `RequireCompression` field is set to `1`, the file must be compressed using the Zlib algorithm with a compression level of 6.
+  - **Speed Limit**: The `SpeedLimit` field is used to set the download speed limit for file transfers, ensuring that the file upload process does not exceed a certain speed.
+  
+  ## Conclusion
+  
+  The **Open File Upload** API is a critical step for initializing the file upload process. It prepares the system to handle large files by specifying temporary storage locations, compression, and hash requirements. It also ensures that duplicate files are avoided by checking the provided file size and hash against existing files in the database.
+}

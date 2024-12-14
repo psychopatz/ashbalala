@@ -1,9 +1,12 @@
+# models/opendrive.py
 from pydantic import BaseModel, Field
 from typing import Optional
 
 class LoginRequest(BaseModel):
-    username: str
-    password: str
+    username: Optional[str] = None
+    password: Optional[str] = None
+    session_id: Optional[str] = None # Optional session_id field
+
 
 class LoginResponse(BaseModel):
     SessionID: str
@@ -27,3 +30,15 @@ class LoginResponse(BaseModel):
     UploadsPerSecond: int
     DownloadsPerSecond: int
 
+class UploadResponse(BaseModel):
+    FileId: str = Field(..., alias='FileId')
+
+class DownloadLinkResponse(BaseModel):
+    DownloadLink: str = Field(..., alias='DownloadLink')
+
+
+class SessionCheckRequest(BaseModel):
+    session_id: str
+
+class SessionCheckResponse(BaseModel):
+  result: bool

@@ -1,3 +1,4 @@
+# services/opendrive_services.py
 import os
 import aiofiles
 from backend.utils.http_client import HTTPClient
@@ -27,7 +28,30 @@ class OpenDriveService:
     async def ensure_session(self):
         if not self.session_id:
             await self.login()
-
+        else:
+             # check if session_id is valid
+             data = {
+                  "session_id": self.session_id
+                }
+             try:
+                 response = await self.http.post("/session/check.json", json=data)
+                 response.raise_for_status()
+                 if response.json().get('Error') == 1:
+                    self.session_id = None
+                    await self.login()
+             except:
+                 self.session_id = None
+                 await self.login()
+    
+    async def check_session(self, session_id: str):
+        """
+        Checks if a session_id is still valid.
+        """
+        data = {
+            "session_id": session_id
+        }
+        response = await self.http.post("/session/exists.json", json=data)
+        return response.json()
 
     async def create_new_folder(
         self,
@@ -55,5 +79,3 @@ class OpenDriveService:
         }
         response = await self.http.post("/folder.json", json=json_data)
         return response.json()
-    
-    

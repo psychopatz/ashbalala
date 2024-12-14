@@ -1,0 +1,114 @@
+meta {
+  name: Close Upload
+  type: http
+  seq: 10
+}
+
+post {
+  url: https://dev.opendrive.com/api/v1/upload/close_file_upload.json
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "session_id": "49f043bcf5b0360b87899031732d3c4ec795cad9c271bb1912450e4d17b86db6",
+    "file_id": "file_001",
+    "file_size": 1048576
+  }
+}
+
+docs {
+  # Close File Upload API Documentation
+  
+  This API is used to finalize the file upload process after all file chunks have been uploaded. It is important to call this function once the file upload is complete to ensure proper handling and storage of the file.
+  
+  ## Endpoint
+  
+  `POST /upload/close_file_upload.json`
+  
+  ## Role
+  
+  - **Role 1 and 2**: Accessible to users with Role 1 and Role 2.
+  
+  ## Description
+  
+  The **Close File Upload** API should be called after the file has been uploaded in chunks. It finalizes the file upload, updates file information, and stores it in the designated location. This function is used to close the upload session, ensuring that the file is fully processed and available for further actions such as sharing or accessing.
+  
+  ## Method
+  
+  - **POST**
+  
+  ## Parameters
+  
+  The request body should contain the following parameters:
+  
+  | Parameter          | Type    | Description                                                                                                     | Required | Notes |
+  |--------------------|---------|-----------------------------------------------------------------------------------------------------------------|----------|-------|
+  | `session_id`       | string  | The unique identifier for the user's session.                                                                   | Yes      | A valid session ID is required to verify the user's authentication. |
+  | `file_id`          | string  | The ID of the file being finalized after upload.                                                                 | Yes      | A valid file ID must be provided. |
+  | `file_size`        | integer | The total size of the uploaded file in bytes.                                                                    | Yes      | This should match the total size of the uploaded file. |
+  | `temp_location`    | string  | The temporary location where the file was stored during the upload process.                                      | No       | This is optional but can be provided if the system requires tracking of the file's temporary location. |
+  | `file_time`        | integer | The time the file was created, represented as a Unix timestamp.                                                  | No       | Optional; defaults to the current time if not provided. |
+  | `access_folder_id` | string  | The ID of the folder that controls access to the uploaded file.                                                  | No       | Optional; used for access control configurations. |
+  | `file_compressed`  | integer | Indicates whether the file is compressed (1 = compressed, 0 = not compressed).                                   | No       | Optional; provides compression status of the file. |
+  | `file_hash`        | string  | The MD5 hash of the file to verify integrity.                                                                   | No       | Optional; used for file integrity verification. |
+  | `sharing_id`       | string  | The sharing configuration ID for the file.                                                                      | No       | Optional; used for sharing settings. |
+  
+  ## Request Example
+  
+  ```json
+  {
+    "session_id": "abcd1234efgh5678",
+    "file_id": "file_001",
+    "file_size": 1048576,
+    "temp_location": "/tmp/uploads/file_001_chunk",
+    "file_time": 1633465734,
+    "access_folder_id": "folder_access_001",
+    "file_compressed": 1,
+    "file_hash": "e99a18c428cb38d5f260853678922e03",
+    "sharing_id": "share_abc123"
+  }
+  ```
+  
+  ## Returns
+  
+  On a successful call, the API will return a JSON object containing the following details about the file:
+  
+  | Field      | Type   | Description                                                                 |
+  |------------|--------|-----------------------------------------------------------------------------|
+  | `FileId`   | string | The unique ID of the uploaded file.                                          |
+  | `Name`     | string | The name of the uploaded file.                                               |
+  | `GroupID`  | string | The group ID for files that belong to a versioned set of files.             |
+  | `Extension`| string | The file extension (format), such as `.pdf`, `.jpg`, `.mp4`, etc.            |
+  
+  ### Example Response
+  
+  ```json
+  {
+    "FileId": "file_001",
+    "Name": "example_document.pdf",
+    "GroupID": "group_001",
+    "Extension": "pdf"
+  }
+  ```
+  
+  ## Error Responses
+  
+  ### `400: Bad Request`
+  - **Session_id field missing**: The `session_id` parameter is required but not provided.
+  - **Invalid file ID**: The `file_id` is invalid or not recognized by the system.
+  
+  ### `401: Unauthorized`
+  - **Session has expired**: The session has expired, and the user must log out and log back in to start a new session.
+  
+  ## Notes
+  
+  - **Session Management**: Ensure the `session_id` is valid before calling this API. If the session has expired, a `401 Unauthorized` error will be returned.
+  - **File Integrity**: Providing a `file_hash` helps ensure the integrity of the file during the upload and finalization process.
+  - **Access Control**: The `access_folder_id` and `file_compressed` parameters are optional but may be important for managing file access and identifying file properties.
+  
+  ## Conclusion
+  
+  The **Close File Upload** API is a crucial step in the file upload process, finalizing the upload and ensuring that the file is properly stored and ready for access, sharing, or further processing. By including relevant metadata and file details, the system guarantees that the file is managed correctly after being uploaded in chunks.
+}

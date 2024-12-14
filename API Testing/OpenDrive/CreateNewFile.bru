@@ -1,0 +1,137 @@
+meta {
+  name: CreateNewFile
+  type: http
+  seq: 7
+}
+
+post {
+  url: https://dev.opendrive.com/api/v1/upload/create_file.json
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "session_id": "49f043bcf5b0360b87899031732d3c4ec795cad9c271bb1912450e4d17b86db6",
+    "folder_id": "NTJfNTY3MzI2MV9Eb2NpSQ",
+    "file_name": "lolalolo.png",
+    "file_description": "This is an example document used for testing.",
+    "open_if_exists": 0
+  }
+  
+}
+
+docs {
+  # Create File API Documentation
+  
+  This API is used to initiate the creation of a file in the system before uploading the actual file content. If both the file size and file hash are provided, the system checks if a file with the same size and hash already exists in the database. If such a file exists, it returns `RequireHashOnly`, indicating that the file is already present. Otherwise, the API prepares the system to accept the file upload.
+  
+  ## Endpoint
+  
+  `POST /upload/create_file.json`
+  
+  ## Role
+  
+  - **Role 1 and 2**: Accessible to users with Role 1 and Role 2.
+  
+  ## Description
+  
+  The **Create File** API should be called before the actual file upload starts if you know the file's size and hash. If a file with the same hash and size already exists, the API returns a response with the status `RequireHashOnly`. This allows the system to avoid uploading duplicate files. 
+  
+  ### Important Behavior:
+  - If `file_size` and `file_hash` are provided, the system checks if a file with the same attributes already exists. If so, the API returns a response indicating that the file is already in the database.
+  - If the file already exists and `open_if_exists` is set to `1`, the file information is returned. 
+  - If `open_if_exists` is set to `0`, an error `409 Conflict` is returned.
+  
+  ## Method
+  
+  - **POST**
+  
+  ## Parameters
+  
+  The request body should contain the following parameters:
+  
+  | Parameter          | Type    | Description                                                                                                       | Required | Notes                                                                                              |
+  |--------------------|---------|-------------------------------------------------------------------------------------------------------------------|----------|----------------------------------------------------------------------------------------------------|
+  | `session_id`       | string  | The unique identifier for the user's session.                                                                     | Yes      | A valid session ID is required for authentication and authorization.                              |
+  | `folder_id`        | string  | The ID of the folder where the file will be uploaded.                                                              | Yes      | The destination folder where the file will be stored.                                             |
+  | `file_name`        | string  | The name of the file being uploaded.                                                                               | Yes      | The file name, including its extension (e.g., `document.pdf`).                                     |
+  | `file_description` | string  | A description of the file (optional).                                                                             | No       | Can be left empty or omitted if not needed.                                                        |
+  | `access_folder_id` | string  | The ID of the folder that controls access permissions for the file.                                               | No       | Optional, used for managing access control settings for the file.                                 |
+  | `file_size`        | integer | The size of the file in bytes.                                                                                    | No       | Optional, but if provided, it will be used to check if the file already exists in the database.    |
+  | `file_hash`        | string  | The MD5 hash of the file.                                                                                         | No       | Optional, but if provided with `file_size`, it will be used to identify duplicate files in the DB. |
+  | `sharing_id`       | string  | The sharing ID for the file (optional).                                                                            | No       | Used for defining sharing permissions for the file.                                               |
+  | `open_if_exists`   | integer | Determines what to do if a file with the same size and hash already exists: `1` to return the file info, `0` to return an error. | Yes      | Set to `1` to return file info if the file exists, or `0` to return an error `409 Conflict`.       |
+  
+  ## Request Example
+  
+  ```json
+  {
+    "session_id": "abcd1234efgh5678",
+    "folder_id": "xyz7890klmn1234",
+    "file_name": "example_document.pdf",
+    "file_description": "A document containing important information.",
+    "access_folder_id": "folder_access_001",
+    "file_size": 1048576,
+    "file_hash": "e99a18c428cb38d5f260853678922e03",
+    "sharing_id": "share_abc123",
+    "open_if_exists": 1
+  }
+  ```
+  
+  ## Returns
+  
+  Upon success, the API will return a JSON object containing the following details about the file:
+  
+  | Field       | Type   | Description                                                                                           |
+  |-------------|--------|-------------------------------------------------------------------------------------------------------|
+  | `FileId`    | string | The unique ID of the file.                                                                             |
+  | `Name`      | string | The name of the file (e.g., `example_document.pdf`).                                                  |
+  | `GroupID`   | string | The group ID for files that have several versions or belong to a versioned group.                    |
+  | `Extension` | string | The file format/extension (e.g., `.pdf`, `.jpg`, `.mp4`).                                              |
+  | `Size`      | string | The size of the file in bytes.                                                                        |
+  | `Views`     | string | The number of views the file has received.                                                            |
+  | `Version`   | string | The current version of the file.                                                                      |
+  | `Downloads` | string | The number of times the file has been downloaded.                                                     |
+  | `Access`    | string | The access control level for the file.                                                                |
+  | `Link`      | string | A URL link to review or edit the file.                                                                |
+  
+  ### Example Response
+  
+  ```json
+  {
+    "FileId": "file_001",
+    "Name": "example_document.pdf",
+    "GroupID": "group_001",
+    "Extension": "pdf",
+    "Size": "1048576",
+    "Views": "12",
+    "Version": "1",
+    "Downloads": "5",
+    "Access": "restricted",
+    "Link": "https://example.com/files/file_001"
+  }
+  ```
+  
+  ## Error Responses
+  
+  ### `400: Bad Request`
+  - **Session_id field missing**: The `session_id` is required but missing from the request.
+  - **Invalid file parameters**: Invalid or missing `file_name`, `file_size`, or `file_hash`.
+  
+  ### `409: Conflict`
+  - **File already exists**: If the file with the same `file_size` and `file_hash` already exists in the database, and `open_if_exists` is set to `0`.
+  
+  ### `401: Unauthorized`
+  - **Session expired**: If the session has expired, prompting the user to log out and log back in.
+  
+  ## Notes
+  
+  - **File Duplication Check**: If both `file_size` and `file_hash` are provided, the API will check for an existing file with the same size and hash. If found, the file's information is returned if `open_if_exists` is set to `1`.
+  - **Versioning**: Files that are uploaded with the same `file_name` but different versions will be grouped under the same `GroupID`. The `Version` field helps track the current version of a file.
+  - **Access Control**: The `access_folder_id` and `sharing_id` can be used to manage access permissions for the file.
+  
+  ## Conclusion
+  
+  The **Create File** API helps in preparing the file upload process by checking for duplicates before uploading the file content. It ensures that the system is aware of files that are already present based on their size and hash, which can help avoid unnecessary uploads and save storage space.
+}

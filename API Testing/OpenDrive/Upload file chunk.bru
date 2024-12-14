@@ -1,0 +1,62 @@
+meta {
+  name: Upload file chunk
+  type: http
+  seq: 9
+}
+
+post {
+  url: https://dev.opendrive.com/api/v1/upload/upload_file_chunk2.json/49f043bcf5b0360b87899031732d3c4ec795cad9c271bb1912450e4d17b86db6/NTJfNDc1OTQzODhfWHZ3RW8
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  file_data: @file(X:\Documents\Desktop\lolalolo.png)
+  temp_location: jKTLffaw04rZxjs642zfpsKRYYPbtdDhS4dkMOw7KvarvOtqDPucnwSHz02HWRTmOoXq7kEu9TZCwo4ZDk23KIloVC5JDt4Ls9eMGl5v2eTwLBYU58E54QfVhzt9XeKLiZnljoTR0lXd8qvusx4vWL/yEbd/XuKSl+LYUOvA0Eknf1CiyYWEIFUg+T8S3ee2biQV6DZ6qMBs248dNaWqLw==,fc2a99163f48495c7b6c4b0fbc87f61012b99b86
+}
+
+docs {
+  # File Upload (Chunked) API Documentation
+  
+  ## Endpoint
+  
+  `POST /upload/upload_file_chunk2.json/{session_id}/{file_id}`
+  
+  ## Description
+  
+  This API uploads large files in chunks. It is more stable than the previous version, especially for users with limited upload speeds. All parameters except `file_data` are passed in the query string.
+  
+  ## Method
+  
+  - **POST**
+  
+  ## Parameters
+  
+  - **`session_id`** (in URL): User's session ID.
+  - **`file_id`** (in URL): ID of the file being uploaded.
+  - **`file_data`** (in request body): Binary data of the file chunk, sent via `$_FILES['file_data']`.
+  
+  ## Returns
+  
+  - **`TotalWritten`**: Integer indicating the total file size written so far (in bytes).
+  
+  ### Example Response
+  
+  ```json
+  {
+    "TotalWritten": 1048576
+  }
+  ```
+  
+  ## Errors
+  
+  - **400: Bad Request**: 
+    - Session_id field missing.
+    - Invalid file ID.
+  - **401: Unauthorized**: Session has expired. Please log out and log back in.
+  
+  ## Notes
+  
+  - This function is more reliable for users with upload speed limitations.
+  
+}
