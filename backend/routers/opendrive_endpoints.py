@@ -7,7 +7,8 @@ from backend.models.opendrive import (
     CreateFileRequest, 
     OpenFileUploadRequest, 
     UploadFileChunkRequest, 
-    CloseFileUploadRequest
+    CloseFileUploadRequest,
+    ListFolderRequest, ListFolderResponse
 )
 import os
 import uuid
@@ -161,5 +162,16 @@ async def upload_file(
             "message": "File uploaded successfully",
             "result": close_file_response
         }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.post("/folder/list", response_model=ListFolderResponse)
+async def list_folder(
+    request: ListFolderRequest,
+    service: OpenDriveService = Depends(get_opendrive_service)
+):
+    try:
+        result = await service.list_folder(request)
+        return result
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

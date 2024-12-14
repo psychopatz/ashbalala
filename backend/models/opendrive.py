@@ -130,3 +130,65 @@ class CloseFileUploadResponse(BaseModel):
     DirUpdateTime: int
     FileName: str
     FileDate: str
+
+# List Folder request/response
+class ListFolderRequest(BaseModel):
+    folder_id: str
+
+class FileInfo(BaseModel):
+    FileId: str
+    Name: str
+    GroupID: int
+    Extension: str
+    Size: str
+    Views: str
+    Version: str
+    Downloads: str
+    DateModified: str
+    Access: str
+    FileHash: str
+    Link: str
+    DownloadLink: str
+    StreamingLink: str
+    TempStreamingLink: str
+    EditLink: Optional[str] = None
+    ThumbLink: str
+    Encrypted: int
+    Password: str
+    EditOnline: int
+
+class FolderInfo(BaseModel):
+    FolderID: str
+    ParentID: str
+    Name: str
+    Description: str
+    IsPublic: str
+    PublicUpl: str
+    PublicDisplay: str
+    PublicDnl: str
+    DateCreated: str
+    DateModified: str
+    DateAccessed: str
+    OwnerSuspended: bool
+    FilesCount: int
+    FoldersCount: int
+    IsArchive: str
+    Category: str
+    OwnerName: str
+    OwnerID: str
+    AccessUser: str
+    DirUpdateTime: int
+    AccessDisabled: int
+    SharingID: str
+    OwnerLevel: str
+    HasSubFolders: int
+
+
+class ListFolderResponse(BaseModel):
+    DirUpdateTime: str
+    Name: str
+    ParentFolderID: str
+    DirectFolderLink: str
+    ResponseType: int
+    Folders: Optional[List[FolderInfo]] = []
+    Files: Optional[List[FileInfo]] = []
