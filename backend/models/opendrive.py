@@ -51,7 +51,8 @@ class CreateFileRequest(BaseModel):
     folder_id: str
     file_name: str
     file_size: int
-
+    open_if_exists: int = 1
+    
 class CreateFileResponse(BaseModel):
     FileId: str
     DirUpdateTime: Optional[int]
@@ -80,8 +81,52 @@ class CloseFileUploadRequest(BaseModel):
     file_size: int
     temp_location: str
     file_time: int
-
+    access_folder_id: str = "0"
+    file_compressed: int = 0
+    file_hash: str = ""
+    sharing_id: str = ""
 
 class CloseFileUploadResponse(BaseModel):
     FileId: str
-    Datetime: str
+    Name: str
+    GroupID: str
+    Extension: str
+    Size: str
+    Views: str
+    Version: str
+    Downloads: str
+    DateTrashed: str
+    DateModified: str
+    OwnerSuspended: bool
+    AccType: str
+    FileHash: str
+    Link: str
+    DownloadLink: str
+    StreamingLink: str
+    OwnerName: str
+    upload_speed_limit: int
+    download_speed_limit: int
+    BWExceeded: int
+    ThumbLink: str
+    Encrypted: str
+    Password: str
+    OwnerLevel: str
+    EditOnline: int
+    ID: str
+    FolderID: str
+    Description: str
+    IsArchive: str
+    Category: str
+    Date: str
+    DateUploaded: int
+    DateAccessed: str
+    DirectLinkPublick: str
+    EmbedLink: str
+    AccessDisabled: int
+    Type: str
+    DestURL: str
+    Owner: str
+    AccessUser: str
+    DirUpdateTime: int
+    FileName: str
+    FileDate: str
