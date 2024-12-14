@@ -1,13 +1,16 @@
 from pydantic import BaseModel
 from typing import Optional, List
 
+
 class CheckFileExistsRequest(BaseModel):
     folder_id: str
     session_id: str
     name: List[str]
 
+
 class CheckFileExistsResponse(BaseModel):
     result: List[str]
+
 
 class CreateFileRequest(BaseModel):
     session_id: str
@@ -16,17 +19,21 @@ class CreateFileRequest(BaseModel):
     file_size: int
     open_if_exists: int = 1
 
+
 class CreateFileResponse(BaseModel):
     FileId: str
     DirUpdateTime: Optional[int]
+
 
 class OpenFileUploadRequest(BaseModel):
     session_id: str
     file_id: str
     file_size: int
 
+
 class OpenFileUploadResponse(BaseModel):
     TempLocation: str
+
 
 class UploadFileChunkRequest(BaseModel):
     session_id: str
@@ -35,8 +42,10 @@ class UploadFileChunkRequest(BaseModel):
     chunk_offset: int
     chunk_size: int
 
+
 class UploadFileChunkResponse(BaseModel):
     TotalWritten: int
+
 
 class CloseFileUploadRequest(BaseModel):
     session_id: str
@@ -48,6 +57,7 @@ class CloseFileUploadRequest(BaseModel):
     file_compressed: int = 0
     file_hash: str = ""
     sharing_id: str = ""
+
 
 class CloseFileUploadResponse(BaseModel):
     FileId: str
@@ -93,3 +103,8 @@ class CloseFileUploadResponse(BaseModel):
     DirUpdateTime: int
     FileName: str
     FileDate: str
+
+
+class RetrieveThumbResponse(BaseModel):
+    content: bytes
+    content_type: str
