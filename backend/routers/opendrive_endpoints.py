@@ -1,17 +1,16 @@
-# routers/opendrive_endpoint.py
-from fastapi import APIRouter, UploadFile, File, HTTPException, Depends
-from backend.services.opendrive_service import OpenDriveService
-from backend.models.opendrive import LoginRequest, SessionCheckRequest, SessionCheckResponse, CheckFileExistsRequest, CheckFileExistsResponse
+from fastapi import APIRouter, HTTPException, Depends, UploadFile, File
 from typing import Optional
-import os
-import uuid
-import aiofiles
+from backend.services.opendrive_service import OpenDriveService
+from backend.models.opendrive import (
+    LoginRequest, SessionCheckRequest, SessionCheckResponse,
+    CheckFileExistsRequest, CheckFileExistsResponse,
+    CreateFileRequest, CreateFileResponse
+)
 
 router = APIRouter()
-# Use dependency injection to get OpenDriveService
+
 def get_opendrive_service():
     return OpenDriveService()
-
 
 @router.post("/login")
 async def login(
@@ -19,8 +18,8 @@ async def login(
     service: OpenDriveService = Depends(get_opendrive_service)
 ):
     if login_request.session_id:
-       service.session_id = login_request.session_id
-       return {"message": "Session ID set", "session_id": service.session_id}
+        service.session_id = login_request.session_id
+        return {"message": "Session ID set", "session_id": service.session_id}
     else:
         login_details = await service.login()
         return login_details
@@ -30,9 +29,6 @@ async def check_session(
     session_check: SessionCheckRequest = Depends(),
     service: OpenDriveService = Depends(get_opendrive_service)
 ) -> SessionCheckResponse:
-    """
-    Endpoint to check if a session_id is valid.
-    """
     try:
         response = await service.check_session(session_check.session_id)
         return SessionCheckResponse(**response)
@@ -48,16 +44,11 @@ async def create_new_folder(
     folder_public_dnl: int = 0,
     folder_description: str = "",
     folder_sub_parent: Optional[str] = None,
-    service: OpenDriveService = Depends(get_opendrive_service) # Use injected service
+    service: OpenDriveService = Depends(get_opendrive_service)
 ):
-    """
-    Endpoint to create a new folder with advanced options.
-    """
     try:
-        # Handle optional folder_sub_parent:
         if folder_sub_parent is None:
-            folder_sub_parent = "0"  # Set to "0" for root folder
-
+            folder_sub_parent = "0"  # root folder
         response = await service.create_new_folder(
             folder_name=folder_name,
             folder_sub_parent=folder_sub_parent,
@@ -70,17 +61,12 @@ async def create_new_folder(
         return response
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
-    
-    
+
 @router.post("/check_file_exists", response_model=CheckFileExistsResponse)
 async def check_file_exists(
     request: CheckFileExistsRequest,
     service: OpenDriveService = Depends(get_opendrive_service)
 ):
-    """
-    Endpoint to check if files exist in a given folder.
-    The 'folder_id' is taken from the request and appended to the endpoint URL.
-    """
     try:
         result = await service.check_file_exists(
             folder_id=request.folder_id,
@@ -88,5 +74,29 @@ async def check_file_exists(
             names=request.name
         )
         return CheckFileExistsResponse(**result)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.post("/create_file", response_model=CreateFileResponse)
+async def create_file(
+    request: CreateFileRequest,
+    service: OpenDriveService = Depends(get_opendrive_service)
+):
+    """
+    Create a file record before actually uploading.
+    """
+    try:
+        result = await service.create_file(
+            session_id=request.session_id,
+            folder_id=request.folder_id,
+            file_name=request.file_name,
+            file_description=request.file_description,
+            access_folder_id=request.access_folder_id,
+            file_size=request.file_size,
+            file_hash=request.file_hash,
+            sharing_id=request.sharing_id,
+            open_if_exists=request.open_if_exists
+        )
+        return CreateFileResponse(**result)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
