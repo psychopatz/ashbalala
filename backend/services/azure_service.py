@@ -1,10 +1,11 @@
+# / backend/services/azure_service.py
 import requests
 import uuid
 import os
 from datetime import datetime, timedelta
 from typing import List, Dict, Optional
 from fastapi import HTTPException
-from backend.core.interfaces import ITTSService
+from backend.core.tts_interface import ITTSService
 from backend.core.config import (
     AZURE_SUBSCRIPTION_KEY, AZURE_TOKEN_URL, AZURE_TTS_URL, AZURE_VOICES_URL,
     TOKEN_EXPIRY_MINUTES, VOICES_UPDATE_INTERVAL
