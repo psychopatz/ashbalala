@@ -29,19 +29,14 @@ class LoginResponse(BaseModel):
     UploadsPerSecond: int
     DownloadsPerSecond: int
 
-class UploadResponse(BaseModel):
-    FileId: str = Field(..., alias='FileId')
-
-class DownloadLinkResponse(BaseModel):
-    DownloadLink: str = Field(..., alias='DownloadLink')
-
+# Session check request/response
 class SessionCheckRequest(BaseModel):
     session_id: str
 
 class SessionCheckResponse(BaseModel):
     result: bool
 
-# Check file exists models
+# Check file exists request/response
 class CheckFileExistsRequest(BaseModel):
     folder_id: str
     session_id: str
@@ -49,55 +44,3 @@ class CheckFileExistsRequest(BaseModel):
 
 class CheckFileExistsResponse(BaseModel):
     result: List[str]
-
-# Create file models
-class CreateFileRequest(BaseModel):
-    session_id: str
-    folder_id: str
-    file_name: str
-    file_description: Optional[str] = None
-    access_folder_id: Optional[str] = None
-    file_size: Optional[int] = None
-    file_hash: Optional[str] = None
-    sharing_id: Optional[str] = None
-    open_if_exists: Optional[int] = None
-
-class CreateFileResponse(BaseModel):
-    FileId: Optional[str] = None
-    Name: Optional[str] = None
-    GroupID: Optional[Union[str, int]] = None  # Accepts both str and int
-    Extension: Optional[str] = None
-    Size: Optional[str] = None
-    Views: Optional[str] = None
-    Version: Optional[str] = None
-    Downloads: Optional[str] = None
-    Access: Optional[str] = None
-    Link: Optional[str] = None
-    DownloadLink: Optional[str] = None
-    StreamingLink: Optional[str] = None
-    DirUpdateTime: Optional[int] = None
-    TempLocation: Optional[str] = None
-    SpeedLimit: Optional[int] = None
-    RequireCompression: Optional[int] = None
-    RequireHash: Optional[int] = None
-    RequireHashOnly: Optional[int] = None
-
-    class Config:
-        extra = "allow"  # Allows ignoring unexpected fields
-
-# Open file upload models
-class OpenFileUploadRequest(BaseModel):
-    session_id: str
-    file_id: str
-    file_size: int
-    access_folder_id: Optional[str] = None
-    file_hash: Optional[str] = None
-    sharing_id: Optional[str] = None
-    
-
-class OpenFileUploadResponse(BaseModel):
-    TempLocation: Optional[str] = None
-    RequireCompression: Optional[int] = None
-    RequireHash: Optional[int] = None
-    RequireHashOnly: Optional[int] = None
-    SpeedLimit: Optional[int] = None

@@ -1,7 +1,5 @@
 from backend.utils.http_client import HTTPClient
-from backend.models.opendrive import (LoginResponse, CheckFileExistsResponse, 
-                                      CreateFileResponse, DownloadLinkResponse,
-                                      OpenFileUploadResponse)
+from backend.models.opendrive import (LoginResponse)
 from backend.core.config import OPENDRIVE_BASE_URL, OPENDRIVE_USERNAME, OPENDRIVE_PASSWORD
 
 class OpenDriveService:
@@ -78,66 +76,5 @@ class OpenDriveService:
             "session_id": session_id,
             "name": names
         }
-        response = await self.http.post(endpoint, json=json_data)
-        return response.json()
-
-    async def create_file(
-        self,
-        session_id: str,
-        folder_id: str,
-        file_name: str,
-        file_description: str = None,
-        access_folder_id: str = None,
-        file_size: int = None,
-        file_hash: str = None,
-        sharing_id: str = None,
-        open_if_exists: int = None
-    ):
-        endpoint = "/upload/create_file.json"
-        json_data = {
-            "session_id": session_id,
-            "folder_id": folder_id,
-            "file_name": file_name,
-        }
-
-        if file_description is not None:
-            json_data["file_description"] = file_description
-        if access_folder_id is not None:
-            json_data["access_folder_id"] = access_folder_id
-        if file_size is not None:
-            json_data["file_size"] = file_size
-        if file_hash is not None:
-            json_data["file_hash"] = file_hash
-        if sharing_id is not None:
-            json_data["sharing_id"] = sharing_id
-        if open_if_exists is not None:
-            json_data["open_if_exists"] = open_if_exists
-
-        response = await self.http.post(endpoint, json=json_data)
-        return response.json()
-
-    async def open_file_upload(
-        self,
-        session_id: str,
-        file_id: str,
-        file_size: int,
-        access_folder_id: str = None,
-        file_hash: str = None,
-        sharing_id: str = None
-    ):
-        endpoint = "/upload/open_file_upload.json"
-        json_data = {
-            "session_id": session_id,
-            "file_id": file_id,
-            "file_size": file_size
-        }
-
-        if access_folder_id is not None:
-            json_data["access_folder_id"] = access_folder_id
-        if file_hash is not None:
-            json_data["file_hash"] = file_hash
-        if sharing_id is not None:
-            json_data["sharing_id"] = sharing_id
-            
         response = await self.http.post(endpoint, json=json_data)
         return response.json()
