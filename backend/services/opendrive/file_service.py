@@ -20,10 +20,6 @@ class FileService(IFileService):
     async def check_file_exists(
         self, folder_id: str, session_id: str, names: list
     ) -> dict:
-        from backend.services.opendrive.auth_service import AuthService
-
-        auth_service = AuthService()
-        await auth_service.ensure_session()
         endpoint = f"/upload/checkfileexistsbyname.json/{folder_id}"
         json_data = {"session_id": session_id, "name": names}
         response = await self.http.post(endpoint, json=json_data)
@@ -32,10 +28,6 @@ class FileService(IFileService):
     async def create_file(
         self, session_id: str, folder_id: str, file_name: str, file_size: int
     ) -> CreateFileResponse:
-        from backend.services.opendrive.auth_service import AuthService
-
-        auth_service = AuthService()
-        await auth_service.ensure_session()
         request_data = {
             "session_id": session_id,
             "folder_id": folder_id,
@@ -51,10 +43,6 @@ class FileService(IFileService):
     async def open_file_upload(
         self, session_id: str, file_id: str, file_size: int
     ) -> OpenFileUploadResponse:
-        from backend.services.opendrive.auth_service import AuthService
-
-        auth_service = AuthService()
-        await auth_service.ensure_session()
         request_data = {
             "session_id": session_id,
             "file_id": file_id,
@@ -76,10 +64,6 @@ class FileService(IFileService):
         chunk_size: int,
         file_path: str,
     ) -> UploadFileChunkResponse:
-        from backend.services.opendrive.auth_service import AuthService
-
-        auth_service = AuthService()
-        await auth_service.ensure_session()
         with open(file_path, "rb") as file:
             files = {"file_data": file}
             data = {
@@ -104,10 +88,6 @@ class FileService(IFileService):
         temp_location: str,
         file_time: int,
     ) -> CloseFileUploadResponse:
-        from backend.services.opendrive.auth_service import AuthService
-
-        auth_service = AuthService()
-        await auth_service.ensure_session()
         request_data = {
             "session_id": session_id,
             "file_id": file_id,
@@ -129,10 +109,6 @@ class FileService(IFileService):
     async def retrieve_thumb(
         self, session_id: str, file_id: str
     ) -> RetrieveThumbResponse:
-        from backend.services.opendrive.auth_service import AuthService
-
-        auth_service = AuthService()
-        await auth_service.ensure_session()
         endpoint = f"/file/thumb.json/{file_id}"
         params = {"session_id": session_id}
         response = await self.http.get(endpoint, params=params)
