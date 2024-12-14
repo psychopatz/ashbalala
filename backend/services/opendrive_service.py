@@ -4,7 +4,8 @@ from backend.models.opendrive import (
     CreateFileRequest, CreateFileResponse,
     OpenFileUploadRequest, OpenFileUploadResponse,
     UploadFileChunkRequest, UploadFileChunkResponse,
-    CloseFileUploadRequest, CloseFileUploadResponse
+    CloseFileUploadRequest, CloseFileUploadResponse,
+    ListFolderRequest, ListFolderResponse
 )
 from backend.core.config import OPENDRIVE_BASE_URL, OPENDRIVE_USERNAME, OPENDRIVE_PASSWORD
 import aiofiles
@@ -133,3 +134,14 @@ class OpenDriveService:
         response.raise_for_status()
         print("close_file_upload response:", response.json())
         return response.json()
+
+    async def list_folder(self, request: ListFolderRequest) -> ListFolderResponse:
+        await self.ensure_session()
+        url = f"/folder/list.json/{self.session_id}/{request.folder_id}"
+        response = await self.http.get(url)
+        response.raise_for_status()
+        print("list_folder response:", response.json())
+        
+        # Parse the response using model_validate
+        data = response.json()
+        return ListFolderResponse.model_validate(data)
