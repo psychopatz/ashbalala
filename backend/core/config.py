@@ -2,7 +2,7 @@ import os
 from datetime import timedelta
 
 # ---------------------------------------------------------
-# Azure Configuration 
+# Azure Configuration
 # ---------------------------------------------------------
 
 # Azure configuration variables
@@ -28,8 +28,8 @@ AUDIO_FILES_DIR = "audio_files"
 os.makedirs(AUDIO_FILES_DIR, exist_ok=True)
 
 # ---------------------------------------------------------
-# OpenDrive Configuration 
+# OpenDrive Configuration
 # ---------------------------------------------------------
 OPENDRIVE_BASE_URL = os.getenv("OPENDRIVE_BASE_URL", "https://dev.opendrive.com/api/v1")
-OPENDRIVE_USERNAME = os.getenv("OPENDRIVE_USERNAME")
+OPENDRIVE_USERNAME = os.getenv("OPENDRIVE_USERNAME")  # defunc na
 OPENDRIVE_PASSWORD = os.getenv("OPENDRIVE_PASSWORD")

@@ -1,50 +1,73 @@
-# backend\services\opendrive\auth_service.py
 from backend.utils.http_client import HTTPClient
-from backend.models.opendrive.auth_models import LoginResponse
-from backend.core.config import OPENDRIVE_BASE_URL, OPENDRIVE_USERNAME, OPENDRIVE_PASSWORD
+from backend.models.opendrive.auth_models import (
+    LoginResponse,
+    LoginRequest,
+    UserInfoResponse,
+)
+from backend.core.config import OPENDRIVE_BASE_URL
 from backend.core.opendrive_interface import IAuthService
+
 
 class AuthService(IAuthService):
     def __init__(self):
         self.base_url = OPENDRIVE_BASE_URL
-        self.username = OPENDRIVE_USERNAME
-        self.password = OPENDRIVE_PASSWORD
         self.http = HTTPClient(base_url=self.base_url)
-        self.session_id = None
 
-    async def login(self) -> LoginResponse:
-        data = {
-            "username": self.username,
-            "passwd": self.password
-        }
-        response = await self.http.post("/session/login.json", json=data)
-        response.raise_for_status()
-        login_data = LoginResponse(**response.json())
-        self.session_id = login_data.SessionID
-        print(f"Loging in using authkey: {self.session_id}")
-        return login_data
+    async def login(self, login_request: LoginRequest) -> LoginResponse:
+        if login_request.session_id:
+            # Check if the provided session ID is valid
+            session_check_response = await self.check_session(login_request.session_id)
+            if session_check_response.get("result") == True:
+                # Session is valid, fetch user info
+                user_info = await self.get_user_info(login_request.session_id)
 
-    async def ensure_session(self):
-        if not self.session_id:
-            await self.login()
+                return LoginResponse(
+                    SessionID=login_request.session_id,
+                    UserName=user_info.UserName,
+                    UserFirstName=user_info.UserFirstName,
+                    UserLastName=user_info.UserLastName,
+                    AccType=user_info.AccType,
+                    UserLang=user_info.UserLang,
+                    Enable2FA=user_info.Enable2FA,
+                    Active2FA=user_info.Enable2FA,  # Use the same value as Enable2FA for now
+                    UserID=str(user_info.UserID),
+                    IsAccountUser=user_info.IsAccountUser,
+                    DriveName="",  # this information is not included in the get user info endpoint, so im leaving it blank
+                    UserLevel=user_info.Level,
+                    UserPlan=user_info.UserPlan,
+                    FVersioning=user_info.FVersioning,
+                    UserDomain="",  # this information is not included in the get user info endpoint, so im leaving it blank
+                    PartnerUsersDomain=user_info.PartnerUsersDomain,
+                    UploadSpeedLimit=0,  # this information is not included in the get user info endpoint, so im leaving it blank
+                    DownloadSpeedLimit=0,  # this information is not included in the get user info endpoint, so im leaving it blank
+                    UploadsPerSecond=0,  # this information is not included in the get user info endpoint, so im leaving it blank
+                    DownloadsPerSecond=0,  # this information is not included in the get user info endpoint, so im leaving it blank
+                )
+
+            else:
+                raise Exception("Invalid Session ID")
         else:
-            # Check if session_id is valid
+            if not login_request.username or not login_request.password:
+                raise Exception(
+                    "Username and password are required when no session_id provided"
+                )
             data = {
-                "session_id": self.session_id
+                "username": login_request.username,
+                "passwd": login_request.password,
             }
-            try:
-                response = await self.http.post("/session/check.json", json=data)
-                response.raise_for_status()
-                if response.json().get('Error') == 1:
-                    self.session_id = None
-                    await self.login()
-            except:
-                self.session_id = None
-                await self.login()
+            response = await self.http.post("/session/login.json", json=data)
+            response.raise_for_status()
+            login_data = LoginResponse(**response.json())
+            return login_data
 
     async def check_session(self, session_id: str) -> dict:
-        data = {
-            "session_id": session_id
-        }
+        data = {"session_id": session_id}
         response = await self.http.post("/session/exists.json", json=data)
         return response.json()
+
+    async def get_user_info(self, session_id: str) -> UserInfoResponse:
+        response = await self.http.get(f"/users/info.json/{session_id}")
+        response.raise_for_status()
+
+        # Parse the response with the correct model
+        return UserInfoResponse(**response.json())
