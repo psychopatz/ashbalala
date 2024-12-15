@@ -1,3 +1,4 @@
+# /backend/models/opendrive/file_models.py
 from pydantic import BaseModel
 from typing import Optional, List
 
@@ -108,3 +109,20 @@ class CloseFileUploadResponse(BaseModel):
 class RetrieveThumbResponse(BaseModel):
     content: bytes
     content_type: str
+
+
+class RemoveDeleteResponse(BaseModel):
+    success: bool
+
+
+# Add for rename file
+class RenameFileRequest(BaseModel):
+    session_id: str
+    new_file_name: str
+    file_id: str
+    access_folder_id: str = ""
+
+
+class RenameFileResponse(BaseModel):
+    success: bool
+    message: str

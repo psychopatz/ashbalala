@@ -1,3 +1,4 @@
+# /backend/routers/opendrive/file.py
 from fastapi import APIRouter, HTTPException, Depends, UploadFile, File, Response
 import os
 import uuid
@@ -9,6 +10,9 @@ from backend.models.opendrive.file_models import (
     OpenFileUploadRequest,
     UploadFileChunkRequest,
     CloseFileUploadRequest,
+    RemoveDeleteResponse,
+    RenameFileRequest,
+    RenameFileResponse,
 )
 from backend.core.opendrive_interface import IFileService
 
@@ -119,5 +123,37 @@ async def get_file_thumbnail(
             content=thumbnail_response.content,
             media_type=thumbnail_response.content_type,
         )
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.delete("/file/{file_id}", response_model=RemoveDeleteResponse)
+async def delete_file_from_trash(
+    file_id: str,
+    session_id: str,
+    access_folder_id: str = "",
+    service: IFileService = Depends(get_file_service),
+):
+    try:
+        result = await service.remove_delete(
+            session_id=session_id, file_id=file_id, access_folder_id=access_folder_id
+        )
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.post("/rename_file", response_model=RenameFileResponse)
+async def rename_file(
+    request: RenameFileRequest, service: IFileService = Depends(get_file_service)
+):
+    try:
+        result = await service.rename_file(
+            session_id=request.session_id,
+            new_file_name=request.new_file_name,
+            file_id=request.file_id,
+            access_folder_id=request.access_folder_id,
+        )
+        return result
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
