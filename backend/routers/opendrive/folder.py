@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from typing import Optional
-from backend.services.opendrive.folder_service import FolderService
-from backend.models.opendrive.folder_models import (
+from services.opendrive.folder_service import FolderService
+from models.opendrive.folder_models import (
     ListFolderRequest,
     ListFolderResponse,
     RemoveFolderRequest,
@@ -10,7 +10,7 @@ from backend.models.opendrive.folder_models import (
     RenameFolderResponse,
     CreateFolderRequest,
 )
-from backend.core.opendrive_interface import IFolderService
+from core.opendrive_interface import IFolderService
 
 router = APIRouter()
 

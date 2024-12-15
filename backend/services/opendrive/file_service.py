@@ -1,6 +1,6 @@
 # /backend/services/opendrive/file_service.py
-from backend.utils.http_client import HTTPClient
-from backend.models.opendrive.file_models import (
+from utils.http_client import HTTPClient
+from models.opendrive.file_models import (
     CreateFileResponse,
     OpenFileUploadResponse,
     UploadFileChunkResponse,
@@ -9,8 +9,8 @@ from backend.models.opendrive.file_models import (
     RemoveDeleteResponse,
     RenameFileResponse,
 )
-from backend.core.config import OPENDRIVE_BASE_URL
-from backend.core.opendrive_interface import IFileService
+from core.config import OPENDRIVE_BASE_URL
+from core.opendrive_interface import IFileService
 import os
 
 

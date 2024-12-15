@@ -1,12 +1,12 @@
 from fastapi import APIRouter, HTTPException, Depends
-from backend.services.opendrive.auth_service import AuthService
-from backend.models.opendrive.auth_models import (
+from services.opendrive.auth_service import AuthService
+from models.opendrive.auth_models import (
     LoginRequest,
     SessionCheckRequest,
     SessionCheckResponse,
     UserInfoResponse,
 )
-from backend.core.opendrive_interface import IAuthService
+from core.opendrive_interface import IAuthService
 
 router = APIRouter()
 

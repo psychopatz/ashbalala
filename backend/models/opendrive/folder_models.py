@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional, List
-from backend.models.opendrive.common_models import FolderInfo
+from models.opendrive.common_models import FolderInfo
 
 
 class CreateFolderRequest(BaseModel):

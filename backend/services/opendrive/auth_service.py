@@ -1,11 +1,11 @@
-from backend.utils.http_client import HTTPClient
-from backend.models.opendrive.auth_models import (
+from utils.http_client import HTTPClient
+from models.opendrive.auth_models import (
     LoginResponse,
     LoginRequest,
     UserInfoResponse,
 )
-from backend.core.config import OPENDRIVE_BASE_URL
-from backend.core.opendrive_interface import IAuthService
+from core.config import OPENDRIVE_BASE_URL
+from core.opendrive_interface import IAuthService
 
 
 class AuthService(IAuthService):

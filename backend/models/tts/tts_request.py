@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from backend.core.config import DEFAULT_VOICE, DEFAULT_STYLE, DEFAULT_RATE, DEFAULT_PITCH
+from core.config import DEFAULT_VOICE, DEFAULT_STYLE, DEFAULT_RATE, DEFAULT_PITCH
 
 class TTSRequest(BaseModel):
     text: str
