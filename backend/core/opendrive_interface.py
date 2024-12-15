@@ -1,12 +1,12 @@
 from typing import Protocol, List
-from backend.models.opendrive.common_models import FileInfo, FolderInfo
-from backend.models.opendrive.auth_models import LoginResponse, UserInfoResponse
-from backend.models.opendrive.folder_models import (
+from models.opendrive.common_models import FileInfo, FolderInfo
+from models.opendrive.auth_models import LoginResponse, UserInfoResponse
+from models.opendrive.folder_models import (
     ListFolderResponse,
     RemoveFolderResponse,
     RenameFolderResponse,
 )
-from backend.models.opendrive.file_models import (
+from models.opendrive.file_models import (
     CreateFileResponse,
     OpenFileUploadResponse,
     UploadFileChunkResponse,

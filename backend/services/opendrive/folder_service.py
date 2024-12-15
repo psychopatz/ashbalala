@@ -1,12 +1,12 @@
-from backend.utils.http_client import HTTPClient
-from backend.models.opendrive.folder_models import (
+from utils.http_client import HTTPClient
+from models.opendrive.folder_models import (
     ListFolderResponse,
     RemoveFolderResponse,
     RenameFolderResponse,
 )
-from backend.models.opendrive.common_models import FolderInfo
-from backend.core.config import OPENDRIVE_BASE_URL
-from backend.core.opendrive_interface import IFolderService
+from models.opendrive.common_models import FolderInfo
+from core.config import OPENDRIVE_BASE_URL
+from core.opendrive_interface import IFolderService
 
 
 class FolderService(IFolderService):

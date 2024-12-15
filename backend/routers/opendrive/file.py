@@ -2,15 +2,15 @@
 from fastapi import APIRouter, HTTPException, Depends, UploadFile, File, Response
 import os
 import uuid
-from backend.services.opendrive.file_service import FileService
-from backend.models.opendrive.file_models import (
+from services.opendrive.file_service import FileService
+from models.opendrive.file_models import (
     CheckFileExistsRequest,
     CheckFileExistsResponse,
     RemoveDeleteResponse,
     RenameFileRequest,
     RenameFileResponse,
 )
-from backend.core.opendrive_interface import IFileService
+from core.opendrive_interface import IFileService
 
 router = APIRouter()
 

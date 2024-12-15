@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from typing import Optional
-from backend.services.tts.azure_service import AzureTTSService
-from backend.core.tts_interface import ITTSService
+from services.tts.azure_service import AzureTTSService
+from core.tts_interface import ITTSService
 
 router = APIRouter()
 

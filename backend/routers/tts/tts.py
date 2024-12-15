@@ -1,11 +1,11 @@
 from fastapi import APIRouter, BackgroundTasks, HTTPException, Depends
-from backend.models.tts.tts_request import TTSRequest
-from backend.services.tts.azure_service import AzureTTSService
-from backend.utils.file_io import save_audio_file
-from backend.core.tts_interface import ITTSService
+from models.tts.tts_request import TTSRequest
+from services.tts.azure_service import AzureTTSService
+from utils.file_io import save_audio_file
+from core.tts_interface import ITTSService
 import base64
 import uuid
-from backend.core.config import AUDIO_FILES_DIR
+from core.config import AUDIO_FILES_DIR
 
 router = APIRouter()
 def get_tts_service() -> ITTSService:
