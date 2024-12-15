@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from typing import Optional, List
 from backend.models.opendrive.common_models import FolderInfo
 
+
 class CreateFolderRequest(BaseModel):
     session_id: str
     folder_name: str
@@ -12,8 +13,11 @@ class CreateFolderRequest(BaseModel):
     folder_public_dnl: int
     folder_description: str = ""
 
+
 class ListFolderRequest(BaseModel):
+    session_id: str
     folder_id: str
+
 
 class ListFolderResponse(BaseModel):
     DirUpdateTime: str
@@ -22,10 +26,23 @@ class ListFolderResponse(BaseModel):
     DirectFolderLink: str
     ResponseType: int
     Folders: Optional[List[FolderInfo]] = []
-    Files: Optional[List[dict]] = []  # Keep as dict for simplicity, if needed add FileInfo model
+    Files: Optional[List[dict]] = []
+
 
 class RemoveFolderRequest(BaseModel):
+    session_id: str
     folder_id: str
 
+
 class RemoveFolderResponse(BaseModel):
+    DirUpdateTime: int
+
+
+class RenameFolderRequest(BaseModel):
+    session_id: str
+    folder_id: str
+    folder_name: str
+
+
+class RenameFolderResponse(BaseModel):
     DirUpdateTime: int
