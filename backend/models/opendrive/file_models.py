@@ -13,51 +13,17 @@ class CheckFileExistsResponse(BaseModel):
     result: List[str]
 
 
-class CreateFileRequest(BaseModel):
-    session_id: str
-    folder_id: str
-    file_name: str
-    file_size: int
-    open_if_exists: int = 1
-
-
 class CreateFileResponse(BaseModel):
     FileId: str
     DirUpdateTime: Optional[int]
-
-
-class OpenFileUploadRequest(BaseModel):
-    session_id: str
-    file_id: str
-    file_size: int
 
 
 class OpenFileUploadResponse(BaseModel):
     TempLocation: str
 
 
-class UploadFileChunkRequest(BaseModel):
-    session_id: str
-    file_id: str
-    temp_location: str
-    chunk_offset: int
-    chunk_size: int
-
-
 class UploadFileChunkResponse(BaseModel):
     TotalWritten: int
-
-
-class CloseFileUploadRequest(BaseModel):
-    session_id: str
-    file_id: str
-    file_size: int
-    temp_location: str
-    file_time: int
-    access_folder_id: str = "0"
-    file_compressed: int = 0
-    file_hash: str = ""
-    sharing_id: str = ""
 
 
 class CloseFileUploadResponse(BaseModel):

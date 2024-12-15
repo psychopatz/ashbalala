@@ -1,10 +1,10 @@
-# /backend/core/opendrive_interface.py
 from typing import Protocol, List
 from backend.models.opendrive.common_models import FileInfo, FolderInfo
 from backend.models.opendrive.auth_models import LoginResponse
 from backend.models.opendrive.folder_models import (
     ListFolderResponse,
     RemoveFolderResponse,
+    RenameFolderResponse,
 )
 from backend.models.opendrive.file_models import (
     CreateFileResponse,
@@ -13,7 +13,7 @@ from backend.models.opendrive.file_models import (
     CloseFileUploadResponse,
     RetrieveThumbResponse,
     RemoveDeleteResponse,
-    RenameFileResponse,  # add RenameFileResponse
+    RenameFileResponse,
 )
 
 
@@ -24,8 +24,10 @@ class IAuthService(Protocol):
 
 
 class IFolderService(Protocol):
+
     async def create_new_folder(
         self,
+        session_id: str,  # Add session_id
         folder_name: str,
         folder_sub_parent: str,
         folder_is_public: int,
@@ -34,8 +36,15 @@ class IFolderService(Protocol):
         folder_public_dnl: int,
         folder_description: str = "",
     ) -> dict: ...
-    async def list_folder(self, folder_id: str) -> ListFolderResponse: ...
-    async def remove_folder(self, folder_id: str) -> RemoveFolderResponse: ...
+    async def list_folder(
+        self, session_id: str, folder_id: str
+    ) -> ListFolderResponse: ...  # Add session_id
+    async def remove_folder(
+        self, session_id: str, folder_id: str
+    ) -> RemoveFolderResponse: ...  # Add session_id
+    async def rename_folder(
+        self, session_id: str, folder_id: str, folder_name: str
+    ) -> RenameFolderResponse: ...  # Add session_id
 
 
 class IFileService(Protocol):

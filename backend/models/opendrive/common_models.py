@@ -1,5 +1,7 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Union
+
+
 class FileInfo(BaseModel):
     FileId: str
     Name: str
@@ -22,28 +24,34 @@ class FileInfo(BaseModel):
     Password: str
     EditOnline: int
 
+
 class FolderInfo(BaseModel):
     FolderID: str
-    ParentID: str
+    ParentID: Optional[str] = None
     Name: str
-    Description: str
-    IsPublic: str
-    PublicUpl: str
-    PublicDisplay: str
-    PublicDnl: str
-    DateCreated: str
-    DateModified: str
-    DateAccessed: str
-    OwnerSuspended: bool
-    FilesCount: int
-    FoldersCount: int
-    IsArchive: str
-    Category: str
-    OwnerName: str
-    OwnerID: str
-    AccessUser: str
-    DirUpdateTime: int
-    AccessDisabled: int
-    SharingID: str
-    OwnerLevel: str
-    HasSubFolders: int
+    Description: Optional[str] = None
+    IsPublic: Optional[Union[int, str]] = None
+    PublicUpl: Optional[Union[int, str]] = None
+    PublicDisplay: Optional[Union[int, str]] = None
+    PublicDnl: Optional[Union[int, str]] = None
+    DateCreated: Optional[Union[int, str]] = None
+    DateModified: Optional[Union[int, str]] = None
+    DateAccessed: Optional[str] = None
+    OwnerSuspended: Optional[bool] = None
+    FilesCount: Optional[int] = None
+    FoldersCount: Optional[int] = None
+    IsArchive: Optional[str] = None
+    Category: Optional[str] = None
+    OwnerName: Optional[str] = None
+    OwnerID: Optional[str] = None
+    AccessUser: Optional[str] = None
+    DirUpdateTime: Optional[int] = None
+    AccessDisabled: Optional[int] = None
+    SharingID: Optional[str] = None
+    OwnerLevel: Optional[str] = None
+    HasSubFolders: Optional[int] = None
+    Access: Optional[int] = None
+    Shared: Optional[str] = None
+    ChildFolders: Optional[int] = None
+    Link: Optional[str] = None
+    Encrypted: Optional[str] = None

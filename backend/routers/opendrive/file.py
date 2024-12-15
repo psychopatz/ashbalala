@@ -6,10 +6,6 @@ from backend.services.opendrive.file_service import FileService
 from backend.models.opendrive.file_models import (
     CheckFileExistsRequest,
     CheckFileExistsResponse,
-    CreateFileRequest,
-    OpenFileUploadRequest,
-    UploadFileChunkRequest,
-    CloseFileUploadRequest,
     RemoveDeleteResponse,
     RenameFileRequest,
     RenameFileResponse,

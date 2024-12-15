@@ -40,7 +40,7 @@ class FileService(IFileService):
         }
         response = await self.http.post("/upload/create_file.json", json=request_data)
         response.raise_for_status()
-        print("create_file response:", response.json())
+        # print("create_file response:", response.json())
         return CreateFileResponse(**response.json())
 
     async def open_file_upload(
@@ -55,7 +55,7 @@ class FileService(IFileService):
             "/upload/open_file_upload.json", json=request_data
         )
         response.raise_for_status()
-        print("open_file_upload response:", response.json())
+        # print("open_file_upload response:", response.json())
         return OpenFileUploadResponse(**response.json())
 
     async def upload_file_chunk(
@@ -106,7 +106,6 @@ class FileService(IFileService):
             "/upload/close_file_upload.json", json=request_data
         )
         response.raise_for_status()
-        print("close_file_upload response:", response.json())
         return response.json()
 
     async def retrieve_thumb(
