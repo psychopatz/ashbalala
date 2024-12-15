@@ -1,6 +1,6 @@
 from typing import Protocol, List
 from backend.models.opendrive.common_models import FileInfo, FolderInfo
-from backend.models.opendrive.auth_models import LoginResponse
+from backend.models.opendrive.auth_models import LoginResponse, UserInfoResponse
 from backend.models.opendrive.folder_models import (
     ListFolderResponse,
     RemoveFolderResponse,
@@ -18,9 +18,11 @@ from backend.models.opendrive.file_models import (
 
 
 class IAuthService(Protocol):
-    async def login(self) -> LoginResponse: ...
+
+    async def login(self, login_request) -> LoginResponse: ...
+
     async def check_session(self, session_id: str) -> dict: ...
-    async def ensure_session(self) -> None: ...
+    async def get_user_info(self, session_id: str) -> UserInfoResponse: ...
 
 
 class IFolderService(Protocol):
