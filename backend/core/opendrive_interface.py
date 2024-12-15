@@ -1,3 +1,4 @@
+# /backend/core/opendrive_interface.py
 from typing import Protocol, List
 from backend.models.opendrive.common_models import FileInfo, FolderInfo
 from backend.models.opendrive.auth_models import LoginResponse
@@ -11,6 +12,8 @@ from backend.models.opendrive.file_models import (
     UploadFileChunkResponse,
     CloseFileUploadResponse,
     RetrieveThumbResponse,
+    RemoveDeleteResponse,
+    RenameFileResponse,  # add RenameFileResponse
 )
 
 
@@ -65,3 +68,13 @@ class IFileService(Protocol):
     async def retrieve_thumb(
         self, session_id: str, file_id: str
     ) -> RetrieveThumbResponse: ...
+    async def remove_delete(
+        self, session_id: str, file_id: str, access_folder_id: str = ""
+    ) -> RemoveDeleteResponse: ...
+    async def rename_file(
+        self,
+        session_id: str,
+        new_file_name: str,
+        file_id: str,
+        access_folder_id: str = "",
+    ) -> RenameFileResponse: ...

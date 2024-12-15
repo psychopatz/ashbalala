@@ -1,3 +1,4 @@
+# /backend/services/opendrive/file_service.py
 from backend.utils.http_client import HTTPClient
 from backend.models.opendrive.file_models import (
     CreateFileResponse,
@@ -5,6 +6,8 @@ from backend.models.opendrive.file_models import (
     UploadFileChunkResponse,
     CloseFileUploadResponse,
     RetrieveThumbResponse,
+    RemoveDeleteResponse,
+    RenameFileResponse,
 )
 from backend.core.config import OPENDRIVE_BASE_URL
 from backend.core.opendrive_interface import IFileService
@@ -116,3 +119,33 @@ class FileService(IFileService):
         return RetrieveThumbResponse(
             content=response.content, content_type=response.headers.get("content-type")
         )
+
+    async def remove_delete(
+        self, session_id: str, file_id: str, access_folder_id: str = ""
+    ) -> RemoveDeleteResponse:
+        url = f"/file.json/{session_id}/{file_id}"
+        params = {}
+        if access_folder_id:
+            params["access_folder_id"] = access_folder_id
+
+        response = await self.http.delete(url, params=params)
+        response.raise_for_status()
+        return RemoveDeleteResponse(success=True)
+
+    async def rename_file(
+        self,
+        session_id: str,
+        new_file_name: str,
+        file_id: str,
+        access_folder_id: str = "",
+    ) -> RenameFileResponse:
+        url = "/file/rename.json"
+        request_data = {
+            "session_id": session_id,
+            "new_file_name": new_file_name,
+            "file_id": file_id,
+            "access_folder_id": access_folder_id,
+        }
+        response = await self.http.post(url, json=request_data)
+        response.raise_for_status()
+        return RenameFileResponse(success=True, message="File renamed successfully")
