@@ -29,19 +29,19 @@ class AuthService(IAuthService):
                     AccType=user_info.AccType,
                     UserLang=user_info.UserLang,
                     Enable2FA=user_info.Enable2FA,
-                    Active2FA=user_info.Enable2FA,  # Use the same value as Enable2FA for now
+                    Active2FA=user_info.Enable2FA,
                     UserID=str(user_info.UserID),
                     IsAccountUser=user_info.IsAccountUser,
-                    DriveName="",  # this information is not included in the get user info endpoint, so im leaving it blank
+                    DriveName="",
                     UserLevel=user_info.Level,
                     UserPlan=user_info.UserPlan,
                     FVersioning=user_info.FVersioning,
-                    UserDomain="",  # this information is not included in the get user info endpoint, so im leaving it blank
+                    UserDomain="",
                     PartnerUsersDomain=user_info.PartnerUsersDomain,
-                    UploadSpeedLimit=0,  # this information is not included in the get user info endpoint, so im leaving it blank
-                    DownloadSpeedLimit=0,  # this information is not included in the get user info endpoint, so im leaving it blank
-                    UploadsPerSecond=0,  # this information is not included in the get user info endpoint, so im leaving it blank
-                    DownloadsPerSecond=0,  # this information is not included in the get user info endpoint, so im leaving it blank
+                    UploadSpeedLimit=0,
+                    DownloadSpeedLimit=0,
+                    UploadsPerSecond=0,
+                    DownloadsPerSecond=0,
                 )
 
             else:
