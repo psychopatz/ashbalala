@@ -13,7 +13,7 @@ from routers.audiobook import chapter as chapter_router
 from routers.audiobook import genre as genre_router
 from routers.audiobook import category as category_router
 from routers.audiobook import tag as audiobook_tag_router
-
+import os  # Import the os module
 
 # Initialize database and create tables
 Base.metadata.create_all(bind=engine)  # moved up so the tables are made first
@@ -55,3 +55,10 @@ def get_db():
         yield db
     finally:
         db.close()
+
+if __name__ == "__main__":
+    import uvicorn
+
+    port = int(os.environ.get("PORT", 8000))  # Get port from env or default
+    print(f"Application Port: {port}")
+    uvicorn.run(app, host="0.0.0.0", port=port, reload=True) 
