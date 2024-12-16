@@ -1,10 +1,8 @@
 # /backend/models/audiobook/tag_model.py
 from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
+from models.base import Base
 from models.audiobook.audiobook_model import Audiobook
-
-Base = declarative_base()
 
 
 class AudiobookTag(Base):
