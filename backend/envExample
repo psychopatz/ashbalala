@@ -4,5 +4,6 @@ AZURE_REGION=eastus
 
 # OpenDrive API
 OPENDRIVE_BASE_URL=https://dev.opendrive.com/api/v1
-OPENDRIVE_USERNAME=your_opendrive_username
-OPENDRIVE_PASSWORD=your_opendrive_password
+
+# Database URL
+DATABASE_URL=localhost

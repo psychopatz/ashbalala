@@ -1,8 +1,9 @@
-# /backend/core/config.py
-
 import os
 from datetime import timedelta
 from dotenv import load_dotenv
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
 
 load_dotenv()
 
@@ -48,3 +49,20 @@ os.makedirs(AUDIO_FILES_DIR, exist_ok=True)
 OPENDRIVE_BASE_URL = os.getenv("OPENDRIVE_BASE_URL", "https://dev.opendrive.com/api/v1")
 OPENDRIVE_USERNAME = os.getenv("OPENDRIVE_USERNAME")
 OPENDRIVE_PASSWORD = os.getenv("OPENDRIVE_PASSWORD")
+
+# ---------------------------------------------------------
+# Database Configuration
+# ---------------------------------------------------------
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
