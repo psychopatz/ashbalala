@@ -1,7 +1,8 @@
+# /backend/main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from core.config import CORS_ORIGINS, engine, SessionLocal
-from models.audiobook.audiobook_model import Base
+from models.base import Base
 from routers.tts import tts as tts_router
 from routers.tts import voices as voices_router
 from routers.opendrive import auth as auth_router
@@ -13,6 +14,9 @@ from routers.audiobook import genre as genre_router
 from routers.audiobook import category as category_router
 from routers.audiobook import tag as audiobook_tag_router
 
+
+# Initialize database and create tables
+Base.metadata.create_all(bind=engine)  # moved up so the tables are made first
 
 app = FastAPI()
 
@@ -42,10 +46,6 @@ app.include_router(
 @app.get("/")
 async def root():
     return {"message": "Welcome to Ashbalala Backend"}
-
-
-# Initialize database
-Base.metadata.create_all(bind=engine)
 
 
 # Dependency to get a database session
