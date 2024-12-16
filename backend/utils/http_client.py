@@ -3,15 +3,15 @@ import httpx
 
 class HTTPClient:
     def __init__(self, base_url: str):
-        self.client = httpx.AsyncClient(base_url=base_url, timeout=30.0)
+       self.client = httpx.AsyncClient(base_url=base_url, timeout=30.0, verify=False) #wa nakoy pake sa security ahahaha
 
     async def post(self, endpoint: str, data=None, json=None, headers=None, files=None):
         response = await self.client.post(
-            endpoint, 
-            data=data, 
-            json=json, 
-            headers=headers, 
-            files=files
+            endpoint,
+            data=data,
+            json=json,
+            headers=headers,
+            files=files,
         )
         response.raise_for_status()
         return response
