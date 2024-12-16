@@ -26,8 +26,8 @@ async def text_to_speech(request: TTSRequest, background_tasks: BackgroundTasks,
         filename = f"audio_{uuid.uuid4()}.mp3"
         file_path = f"{AUDIO_FILES_DIR}/{filename}"
 
-        # Save the audio in the background
-        background_tasks.add_task(save_audio_file, audio_content, file_path)
+        # Save the audio in the background Not recommended kay limited storage sa backend server
+        # background_tasks.add_task(save_audio_file, audio_content, file_path)
 
         return {
             "status": "success",
