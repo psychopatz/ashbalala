@@ -2,6 +2,7 @@
 from sqlalchemy import Column, Integer, String, Date, ForeignKey, Float
 from models.base import Base
 from sqlalchemy.orm import relationship
+from models.audiobook.audiobook_genre_model import AudiobookGenre
 
 
 class Audiobook(Base):
@@ -16,3 +17,5 @@ class Audiobook(Base):
     description = Column(String(255), nullable=False)
     cover_image_url = Column(String(255), nullable=False)
     updated_at = Column(Date, nullable=False)
+
+    genres = relationship("Genre", secondary="audiobook_genres", backref="audiobooks")

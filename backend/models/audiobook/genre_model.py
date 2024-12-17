@@ -1,6 +1,7 @@
 # backend/models/audiobook/genre_model.py
 from sqlalchemy import Column, Integer, String
 from models.base import Base
+from sqlalchemy.orm import relationship
 
 
 class Genre(Base):

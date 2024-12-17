@@ -13,6 +13,7 @@ from routers.audiobook import chapter as chapter_router
 from routers.audiobook import genre as genre_router
 from routers.audiobook import category as category_router
 from routers.audiobook import tag as audiobook_tag_router
+from routers.audiobook import audiobook_genre as audiobook_genre_router # Import the new router
 import os  # Import the os module
 
 # Initialize database and create tables
@@ -41,6 +42,7 @@ app.include_router(category_router.router, prefix="/categories", tags=["Categori
 app.include_router(
     audiobook_tag_router.router, prefix="/audiobook_tags", tags=["Audiobook Tags"]
 )
+app.include_router(audiobook_genre_router.router, prefix="/audiobook-genres", tags=["Audiobook Genres"]) # Include new Router
 
 
 @app.get("/")
