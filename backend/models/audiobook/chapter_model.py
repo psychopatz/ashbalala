@@ -1,6 +1,6 @@
 # backend/models/audiobook/chapter_model.py
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, Date
+from sqlalchemy.orm import relationship, Mapped
 from models.base import Base
 from models.audiobook.audiobook_model import Audiobook
 
@@ -14,5 +14,7 @@ class Chapter(Base):
     duration = Column(Float, nullable=False)
     file_url = Column(String(255), nullable=False)
     sequence_number = Column(Integer, nullable=False)
+    cover_image_url = Column(String(255), nullable=False)
+    release_date = Column(Date, nullable=False)
 
     audiobook = relationship(Audiobook, backref="chapters")

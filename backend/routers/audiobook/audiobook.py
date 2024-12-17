@@ -17,9 +17,8 @@ class AudiobookCreate(BaseModel):
     duration: float
     release_date: date
     description: str
-    genre_id: int
-    file_url: str
     cover_image_url: str
+    updated_at: date
 
 
 class AudiobookUpdate(BaseModel):
@@ -29,9 +28,8 @@ class AudiobookUpdate(BaseModel):
     duration: float | None = None
     release_date: date | None = None
     description: str | None = None
-    genre_id: int | None = None
-    file_url: str | None = None
     cover_image_url: str | None = None
+    updated_at: date | None = None
 
 
 class AudiobookResponse(BaseModel):
@@ -42,9 +40,8 @@ class AudiobookResponse(BaseModel):
     duration: float
     release_date: date
     description: str
-    genre_id: int
-    file_url: str
     cover_image_url: str
+    updated_at: date
 
 
 @router.post("/", response_model=AudiobookResponse, status_code=201)
