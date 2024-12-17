@@ -5,6 +5,7 @@ from typing import List
 from core.config import get_db
 from services.audiobook import chapter_service
 from pydantic import BaseModel
+from datetime import date
 
 
 router = APIRouter()
@@ -16,6 +17,8 @@ class ChapterCreate(BaseModel):
     duration: float
     file_url: str
     sequence_number: int
+    cover_image_url: str
+    release_date: date
 
 
 class ChapterUpdate(BaseModel):
@@ -23,6 +26,8 @@ class ChapterUpdate(BaseModel):
     duration: float | None = None
     file_url: str | None = None
     sequence_number: int | None = None
+    cover_image_url: str | None = None
+    release_date: date | None = None
 
 
 class ChapterResponse(BaseModel):
@@ -32,6 +37,8 @@ class ChapterResponse(BaseModel):
     duration: float
     file_url: str
     sequence_number: int
+    cover_image_url: str
+    release_date: date
 
 
 @router.post("/", response_model=ChapterResponse, status_code=201)

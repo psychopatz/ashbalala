@@ -14,6 +14,5 @@ class Audiobook(Base):
     duration = Column(Float, nullable=False)
     release_date = Column(Date, nullable=False)
     description = Column(String(255), nullable=False)
-    genre_id = Column(Integer, nullable=False)
-    file_url = Column(String(255), nullable=False)
     cover_image_url = Column(String(255), nullable=False)
+    updated_at = Column(Date, nullable=False)
