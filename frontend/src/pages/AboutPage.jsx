@@ -1,14 +1,14 @@
-// frontend/src/pages/AboutPage.jsx
+ // frontend/src/pages/AboutPage.jsx
+ import React from 'react';
+ import { Box } from '@mui/material';
 
-import React from 'react';
+ function AboutPage() {
+ return (
+     <Box sx={{ backgroundColor: 'background.default', minHeight: '100vh', padding: 2 }}>
+     <h1>About Us</h1>
+     <p>This is the about page.</p>
+     </Box>
+ );
+ }
 
-function AboutPage() {
-  return (
-    <div>
-      <h1>About Us</h1>
-      <p>This is the about page.</p>
-    </div>
-  );
-}
-
-export default AboutPage;
+ export default AboutPage;
