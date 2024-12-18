@@ -97,3 +97,12 @@ class RenameFileResponse(BaseModel):
 class ExpiringLinkResponse(BaseModel):
     DownloadLink: str
     StreamingLink: str
+
+
+class ExpiringLinkInfoResponse(BaseModel):
+    DownloadLink: str
+    StreamingLink: str
+    CounterMax: int
+    CounterEnable: int
+    ExpiringDate: str
+    Counter: int

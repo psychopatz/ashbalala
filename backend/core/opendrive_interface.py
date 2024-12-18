@@ -10,7 +10,8 @@ from models.opendrive.file_models import (
     RetrieveThumbResponse,
     RemoveDeleteResponse,
     RenameFileResponse,
-    ExpiringLinkResponse,  # Import the new model
+    ExpiringLinkResponse,
+    ExpiringLinkInfoResponse,
 )
 from models.opendrive.folder_models import (
     ListFolderResponse,
@@ -101,6 +102,12 @@ class IFileService(ABC):
     async def get_expiring_link(
         self, session_id: str, date: str, counter: int, file_id: str, enable: str
     ) -> ExpiringLinkResponse:
+        pass
+
+    @abstractmethod
+    async def get_expiring_link_info(
+        self, session_id: str, file_id: str
+    ) -> ExpiringLinkInfoResponse:
         pass
 
 

@@ -9,6 +9,7 @@ from models.opendrive.file_models import (
     RemoveDeleteResponse,
     RenameFileResponse,
     ExpiringLinkResponse,
+    ExpiringLinkInfoResponse,
 )
 from core.config import OPENDRIVE_BASE_URL
 from core.opendrive_interface import IFileService
@@ -159,3 +160,11 @@ class FileService(IFileService):
         response = await self.http.get(endpoint)
         response.raise_for_status()
         return ExpiringLinkResponse(**response.json())
+
+    async def get_expiring_link_info(
+        self, session_id: str, file_id: str
+    ) -> ExpiringLinkInfoResponse:
+        endpoint = f"/file/fileexpiringlinks.json/{session_id}/{file_id}"
+        response = await self.http.get(endpoint)
+        response.raise_for_status()
+        return ExpiringLinkInfoResponse(**response.json())
