@@ -92,3 +92,8 @@ class RenameFileRequest(BaseModel):
 class RenameFileResponse(BaseModel):
     success: bool
     message: str
+
+
+class ExpiringLinkResponse(BaseModel):
+    DownloadLink: str
+    StreamingLink: str
