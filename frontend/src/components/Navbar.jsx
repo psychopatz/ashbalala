@@ -29,6 +29,12 @@ const navItems = [
         path: '/contact',
         icon: <ContactMailIcon/>
     },
+    {
+        id: 4,
+        label: 'Audio Player',
+        path: '/audio',
+        icon: <ContactMailIcon/>
+    }
 ];
 
 function Navbar() {

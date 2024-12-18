@@ -9,6 +9,7 @@ from models.opendrive.file_models import (
     RemoveDeleteResponse,
     RenameFileRequest,
     RenameFileResponse,
+    ExpiringLinkResponse,
 )
 from core.opendrive_interface import IFileService
 
@@ -153,3 +154,29 @@ async def rename_file(
         return result
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.get(
+    "/expiringlink.json/{session_id}/{date}/{counter}/{file_id}/{enable}",
+    response_model=ExpiringLinkResponse,
+)
+async def get_file_expiring_link(
+    session_id: str,
+    date: str,
+    counter: int,
+    file_id: str,
+    enable: str,
+    file_service: FileService = Depends(),
+):
+    try:
+        expiring_link = await file_service.get_expiring_link(
+            session_id=session_id,
+            date=date,
+            counter=counter,
+            file_id=file_id,
+            enable=enable,
+        )
+        return expiring_link
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail="Internal Server Error")
