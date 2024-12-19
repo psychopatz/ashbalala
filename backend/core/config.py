@@ -48,8 +48,12 @@ os.makedirs(AUDIO_FILES_DIR, exist_ok=True)
 # OpenDrive Configuration
 # ---------------------------------------------------------
 OPENDRIVE_BASE_URL = os.getenv("OPENDRIVE_BASE_URL", "https://dev.opendrive.com/api/v1")
-OPENDRIVE_USERNAME = os.getenv("OPENDRIVE_USERNAME")
-OPENDRIVE_PASSWORD = os.getenv("OPENDRIVE_PASSWORD")
+
+# ---------------------------------------------------------
+# Folder Configuration
+# ---------------------------------------------------------
+ROOT_ID = os.getenv("ROOT_ID")
+AUDIOBOOK_ID = os.getenv("AUDIOBOOK_ID")
 
 # ---------------------------------------------------------
 # Database Configuration
