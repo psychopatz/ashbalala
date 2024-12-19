@@ -13,11 +13,13 @@ from routers.audiobook import chapter as chapter_router
 from routers.audiobook import genre as genre_router
 from routers.audiobook import category as category_router
 from routers.audiobook import tag as audiobook_tag_router
-from routers.audiobook import audiobook_genre as audiobook_genre_router # Import the new router
-import os  # Import the os module
+from routers.audiobook import audiobook_genre as audiobook_genre_router
+from routers.opendrive import recursive_folder as recursive_folder_router
+
+import os
 
 # Initialize database and create tables
-Base.metadata.create_all(bind=engine)  # moved up so the tables are made first
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
@@ -35,6 +37,11 @@ app.include_router(voices_router.router, prefix="/voices", tags=["Voices"])
 app.include_router(auth_router.router, prefix="/opendrive", tags=["OpenDrive Auth"])
 app.include_router(folder_router.router, prefix="/opendrive", tags=["OpenDrive Folder"])
 app.include_router(file_router.router, prefix="/opendrive", tags=["OpenDrive File"])
+app.include_router(
+    recursive_folder_router.router,
+    prefix="/opendrive",
+    tags=["OpenDrive Recursive Folder"],
+)
 app.include_router(audiobook_router.router, prefix="/audiobooks", tags=["Audiobooks"])
 app.include_router(chapter_router.router, prefix="/chapters", tags=["Chapters"])
 app.include_router(genre_router.router, prefix="/genres", tags=["Genres"])
